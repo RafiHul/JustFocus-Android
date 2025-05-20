@@ -10,7 +10,8 @@ class BlockedAppRepository(private val dao: BlockedAppDao) {
         chachedBlockedList = dao.getBlockedApp().map { it.packageName }
     }
 
-    fun isAppBlocked(packageName: String){
-        chachedBlockedList.contains(packageName)
+    fun isAppBlocked(packageName: String): Boolean {
+       return chachedBlockedList.contains(packageName)
     }
+
 }
