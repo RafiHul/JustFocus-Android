@@ -6,12 +6,11 @@ import android.content.pm.PackageManager
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aay.compose.donutChart.model.PieChartData
 import com.rafih.justfocus.domain.model.UsageStatsInfo
-import com.rafih.justfocus.domain.usecase.CalculateAppUsagePercentageUseCase
+import com.rafih.justfocus.domain.usecase.DonutChartOperationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UsageStatsViewModel @Inject constructor(
-    private val donutChartUseCase: CalculateAppUsagePercentageUseCase
+    private val donutChartUseCase: DonutChartOperationUseCase
 ): ViewModel() {
 
     var usageStatsState by mutableStateOf<UsageStatsState>(UsageStatsState.Loading)
@@ -64,30 +63,11 @@ class UsageStatsViewModel @Inject constructor(
             }
         }.sortedByDescending { it.totalTimeInForeground }
 
-        val x = donutChartUseCase.calculatePercentages(n)
+        val x = donutChartUseCase.calculatePercentageForDonutChart(n)
 
-        _donutChartData.value = filterDonutChart(x)
+        _donutChartData.value = donutChartUseCase.filterDonutChart(x)
         usageStatsState = UsageStatsState.Idle
         return x
-    }
-
-    private fun filterDonutChart(data: List<UsageStatsInfo>): MutableList<PieChartData> {
-
-        val (mainData, otherData) = data.partition { it.dataChartPercentInfo.color != Color.Gray } // partition data
-
-        val tempChartData = mutableListOf<PieChartData>()
-
-        tempChartData += mainData.map {
-            PieChartData(
-                it.dataChartPercentInfo.percentUsed,
-                it.dataChartPercentInfo.color,
-                it.usageStats.packageName
-            )
-        }
-
-        val otherStateDataTotal = otherData.sumOf { it.dataChartPercentInfo.percentUsed }.toDouble()
-        tempChartData += PieChartData(otherStateDataTotal, Color.Gray, "Other")
-        return tempChartData
     }
 
     sealed class UsageStatsState{
