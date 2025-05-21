@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.text.TextUtils
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -29,10 +30,9 @@ class MainActivity : ComponentActivity() {
             startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
         }
 
-//        if(!hasAccessbilityPermission(MyAccessbilityService())){
-//            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
-//            startActivity(intent)
-//        }
+        if(!hasAccessbilityPermission(MyAccessbilityService())){
+            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+        }
 
         setContent {
             JustFocusTheme {
@@ -64,16 +64,18 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun hasAccessbilityPermission(service: AccessibilityService): Boolean {
-        val enabledService = Settings.System.getString(
+        val expectedComponentName = ComponentName(this, service::class.java)
+        val enabledService = Settings.Secure.getString(
             contentResolver, Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
         ) ?: return false
 
         val colonSplitter = TextUtils.SimpleStringSplitter(':')
         colonSplitter.setString(enabledService)
+        Log.d("cek colon", colonSplitter.toString())
 
-        val myService = ComponentName(this, service::class.java)
-        for(serviceName in colonSplitter){
-            if(serviceName.equals(myService.toString(), ignoreCase = true)){
+        while(colonSplitter.hasNext()){
+            val componentName = ComponentName.unflattenFromString(colonSplitter.next())
+            if (componentName != null && componentName == expectedComponentName){
                 return true
             }
         }
