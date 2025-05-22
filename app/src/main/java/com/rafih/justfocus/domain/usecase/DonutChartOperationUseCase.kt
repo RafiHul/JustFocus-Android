@@ -1,8 +1,8 @@
 package com.rafih.justfocus.domain.usecase
 
-import android.app.usage.UsageStats
 import androidx.compose.ui.graphics.Color
 import com.aay.compose.donutChart.model.PieChartData
+import com.rafih.justfocus.domain.model.AppUsageEvent
 import com.rafih.justfocus.domain.model.DataChartPercentInfo
 import com.rafih.justfocus.domain.model.UsageStatsInfo
 import com.rafih.justfocus.presentation.ui.theme.pieChartDataColor
@@ -12,14 +12,13 @@ import kotlin.collections.plusAssign
 
 @Singleton
 class DonutChartOperationUseCase @Inject constructor(){
-    suspend fun calculatePercentageForDonutChart(data: List<UsageStats>?):  List<UsageStatsInfo> {
-        if (data == null) return listOf()
+    suspend fun calculatePercentageForDonutChart(data: List<AppUsageEvent>):  List<UsageStatsInfo> {
         val finalData: MutableList<UsageStatsInfo> = mutableListOf()
 
-        val total = data.sumOf { it.totalTimeInForeground }
+        val total = data.sumOf { it.appUsedTimeInMills }
 
         data.forEachIndexed { idx, item ->
-            val percent = (item.totalTimeInForeground.toDouble() / total.toDouble()) * 100
+            val percent = (item.appUsedTimeInMills.toDouble() / total.toDouble()) * 100
             val dataChartPercentInfo = DataChartPercentInfo(percent, pieChartDataColor.getOrElse(idx) { pieChartDataColor.last() })
             val temp = UsageStatsInfo(item, dataChartPercentInfo)
             finalData.add(temp)
@@ -38,7 +37,7 @@ class DonutChartOperationUseCase @Inject constructor(){
             PieChartData(
                 it.dataChartPercentInfo.percentUsed,
                 it.dataChartPercentInfo.color,
-                it.usageStats.packageName
+                it.appUsageEvent.packageName
             )
         }
 

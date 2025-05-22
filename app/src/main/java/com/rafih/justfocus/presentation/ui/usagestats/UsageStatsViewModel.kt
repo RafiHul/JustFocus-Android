@@ -1,14 +1,17 @@
 package com.rafih.justfocus.presentation.ui.usagestats
 
+import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aay.compose.donutChart.model.PieChartData
+import com.rafih.justfocus.domain.model.AppUsageEvent
 import com.rafih.justfocus.domain.model.UsageStatsInfo
 import com.rafih.justfocus.domain.usecase.DonutChartOperationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,28 +43,58 @@ class UsageStatsViewModel @Inject constructor(
 
     private suspend fun getUserSystemUsage(context: Context, pm: PackageManager): List<UsageStatsInfo>? {
         val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+
+        val lastForegroundMap: MutableMap<String, Long> = mutableMapOf()
+        val usageMap: MutableMap<String, Long> = mutableMapOf()
+        val usageData: MutableList<AppUsageEvent> = mutableListOf()
+
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
-        val endTime = System.currentTimeMillis()
+
 //      val startTime = endTime - 100 * 60 * 60 * 24 //24 jam
         val startTime = calendar.timeInMillis
+        val endTime = System.currentTimeMillis()
 
-        val usageData = usageStatsManager.queryUsageStats(
-            UsageStatsManager.INTERVAL_DAILY, startTime, endTime
-        )
+        val usageEvents = usageStatsManager.queryEvents(startTime, endTime)
+
+        val event = UsageEvents.Event()
+        while(usageEvents.hasNextEvent()){
+            usageEvents.getNextEvent(event)
+
+            val packageName = event.packageName
+
+            when(event.eventType){
+                UsageEvents.Event.ACTIVITY_RESUMED -> { // aplikasi terakhir di buka kapan
+                    lastForegroundMap[packageName] = event.timeStamp
+                }
+                UsageEvents.Event.ACTIVITY_PAUSED -> { // aplikasi terakhir di tutup kapan
+                    val start = lastForegroundMap[packageName] ?: continue
+                    val duration = event.timeStamp - start
+                    if (duration > 0){
+                        usageMap[packageName] = usageMap.getOrDefault(packageName, 0L) + duration
+                    }
+
+                    lastForegroundMap.remove(packageName)
+                }
+            }
+        }
+
+        usageMap.forEach { k,v ->
+            usageData.add(AppUsageEvent(k,v))
+        }
 
         val n = usageData.filter {
-            try{
+            try {
                 pm.getApplicationInfo(it.packageName, 0)
 //                (appInfo.flags and ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0
                 true
             } catch (e: PackageManager.NameNotFoundException) {
                 false
             }
-        }.sortedByDescending { it.totalTimeInForeground }
+        }.sortedByDescending { it.appUsedTimeInMills }
 
         val x = donutChartUseCase.calculatePercentageForDonutChart(n)
 

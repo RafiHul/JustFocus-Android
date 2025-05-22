@@ -45,12 +45,12 @@ fun UsageStatsScreen(
 
                     LazyColumn {
                         itemsIndexed(it) { index, items ->
-                            val item = items.usageStats
-                            if(item.totalTimeInForeground >= 1000){
+                            val item = items.appUsageEvent
+                            if(item.appUsedTimeInMills >= 1000){
                                 val otherAppInfo = packageManager.getApplicationInfo(item.packageName, 5)
                                 val otherAppIcon = packageManager.getApplicationIcon(otherAppInfo)
                                 val otherAppName = packageManager.getApplicationLabel(otherAppInfo).toString()
-                                val totalUsed = formatDuration(item.totalTimeInForeground)
+                                val totalUsed = formatDuration(item.appUsedTimeInMills)
 
                                 CardItemApp(otherAppIcon, otherAppName, totalUsed)
                             }
