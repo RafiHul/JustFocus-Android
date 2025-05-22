@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.outlined.DateRange
+import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -28,42 +32,35 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.graphics.toColorInt
 import coil3.compose.AsyncImage
 
 @Composable
 fun CardItemApp(appIcon: Drawable, appName: String, appTotalUsed: String){
-    Card(shape = RoundedCornerShape(40.dp),
-        colors = CardDefaults.cardColors(Color("#F4F7FF".toColorInt())),
+    Card(colors = CardDefaults.cardColors(Color.White),
         modifier = Modifier
-            .size(345.dp, 70.dp)) {
+            .fillMaxWidth()
+            .wrapContentHeight()) {
         Row(verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 12.dp, top = 10.dp, bottom = 10.dp, end = 12.dp)){
+                .padding(horizontal = 16.dp, vertical = 8.dp)){
 
-            Box(contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .background(Color.White, shape = CircleShape)
-                    .size(50.dp)
-            ) {
-                AsyncImage(model = appIcon, contentDescription = null, modifier = Modifier
-                    .size(30.dp)
-                    .clip(CircleShape))
-            }
 
-            Column(Modifier.padding(start = 8.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(imageVector = Icons.Outlined.DateRange,contentDescription = null, modifier = Modifier.size(15.dp,15.dp))
-                    Text(appTotalUsed, fontSize = 10.sp, fontFamily = FontFamily.Serif, fontStyle = FontStyle.Normal, modifier = Modifier.padding(start = 2.dp))
-                }
-                Text(appName, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            AsyncImage(model = appIcon, contentDescription = null, modifier = Modifier
+                .size(30.dp)
+                .clip(CircleShape))
+
+
+            Column(Modifier.padding(start = 16.dp)) {
+                Text(appName, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(appTotalUsed, fontSize = 14.sp, fontFamily = FontFamily.Serif, fontStyle = FontStyle.Normal)
             }
 
             Spacer(Modifier.weight(1f))
 
             Icon(
-                imageVector = Icons.Rounded.MoreVert,
+                imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
+
                 contentDescription = null
             )
         }
