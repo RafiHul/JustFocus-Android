@@ -6,8 +6,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
-import com.rafih.justfocus.data.local.repository.BlockedAppRepository
-import com.rafih.justfocus.data.local.repository.DataStoreRepository
+import com.rafih.justfocus.data.repository.BlockedAppRepository
+import com.rafih.justfocus.data.repository.DataStoreRepository
 import com.rafih.justfocus.di.ServiceEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope

@@ -1,6 +1,6 @@
-package com.rafih.justfocus.data.local.repository
+package com.rafih.justfocus.data.repository
 
-import com.rafih.justfocus.data.local.dao.BlockedAppDao
+import com.rafih.justfocus.data.local.room.dao.BlockedAppDao
 import com.rafih.justfocus.data.model.BlockedApp
 import javax.inject.Inject
 import javax.inject.Singleton

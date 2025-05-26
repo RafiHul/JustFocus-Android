@@ -1,8 +1,7 @@
 package com.rafih.justfocus.domain.usecase
 
 import android.util.Log
-import androidx.room.Room
-import com.rafih.justfocus.data.local.repository.BlockedAppRepository
+import com.rafih.justfocus.data.repository.BlockedAppRepository
 import com.rafih.justfocus.data.model.BlockedApp
 import com.rafih.justfocus.domain.util.RoomResult
 import javax.inject.Inject

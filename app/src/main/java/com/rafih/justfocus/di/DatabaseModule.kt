@@ -2,7 +2,7 @@ package com.rafih.justfocus.di
 
 import android.content.Context
 import androidx.room.Room
-import com.rafih.justfocus.data.local.AppDatabase
+import com.rafih.justfocus.data.local.room.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

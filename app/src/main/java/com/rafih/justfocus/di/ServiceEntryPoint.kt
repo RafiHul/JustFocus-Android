@@ -1,7 +1,7 @@
 package com.rafih.justfocus.di
 
-import com.rafih.justfocus.data.local.repository.BlockedAppRepository
-import com.rafih.justfocus.data.local.repository.DataStoreRepository
+import com.rafih.justfocus.data.repository.BlockedAppRepository
+import com.rafih.justfocus.data.repository.DataStoreRepository
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent

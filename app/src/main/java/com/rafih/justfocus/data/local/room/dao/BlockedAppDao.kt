@@ -1,4 +1,4 @@
-package com.rafih.justfocus.data.local.dao
+package com.rafih.justfocus.data.local.room.dao
 
 import androidx.room.Dao
 import androidx.room.Delete

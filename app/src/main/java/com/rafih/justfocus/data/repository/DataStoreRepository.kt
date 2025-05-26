@@ -1,4 +1,4 @@
-package com.rafih.justfocus.data.local.repository
+package com.rafih.justfocus.data.repository
 
 import com.rafih.justfocus.data.local.datastore.DataStoreManager
 import javax.inject.Inject
