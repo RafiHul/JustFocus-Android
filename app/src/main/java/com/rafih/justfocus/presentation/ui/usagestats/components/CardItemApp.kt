@@ -36,10 +36,10 @@ import coil3.compose.AsyncImage
 
 @Composable
 fun CardItemApp(appIcon: Drawable, appName: String, appTotalUsed: String){
-    Card(colors = CardDefaults.cardColors(Color.White),
-        modifier = Modifier
-            .fillMaxWidth()
-            .wrapContentHeight()) {
+    Box(modifier = Modifier
+        .background(Color.White)
+        .fillMaxWidth()
+        .wrapContentHeight()) {
         Row(verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .fillMaxSize()
@@ -60,7 +60,6 @@ fun CardItemApp(appIcon: Drawable, appName: String, appTotalUsed: String){
 
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
-
                 contentDescription = null
             )
         }
