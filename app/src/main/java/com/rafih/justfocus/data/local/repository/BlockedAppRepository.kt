@@ -1,17 +1,25 @@
 package com.rafih.justfocus.data.local.repository
 
 import com.rafih.justfocus.data.local.dao.BlockedAppDao
+import com.rafih.justfocus.data.model.BlockedApp
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BlockedAppRepository(private val dao: BlockedAppDao) {
+@Singleton
+class BlockedAppRepository @Inject constructor(private val dao: BlockedAppDao) {
 
     private var chachedBlockedList: List<String> = emptyList()
 
-    suspend fun loadBlockedApps(){
+    suspend fun addBlockedApp(blockedApp: BlockedApp) = dao.addBlockedApp(blockedApp)
+    suspend fun deleteBlockedApp(blockedApp: BlockedApp) = dao.deleteBlockedApp(blockedApp)
+
+    suspend fun loadBlockedApp(){
         chachedBlockedList = dao.getBlockedApp().map { it.packageName }
     }
 
     fun isAppBlocked(packageName: String): Boolean {
        return chachedBlockedList.contains(packageName)
     }
+
 
 }
