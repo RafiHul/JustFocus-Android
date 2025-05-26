@@ -41,7 +41,7 @@ class UsageStatsViewModel @Inject constructor(
     }
 
     fun changeDateSelected(idx: Int){
-        if(idx !in 0.._barChartDataList.value.size){
+        if(idx !in 0..barChartDataList.value.size - 1){
             return
         }
         _dateSelected.value = barChartDataList.value[idx]
