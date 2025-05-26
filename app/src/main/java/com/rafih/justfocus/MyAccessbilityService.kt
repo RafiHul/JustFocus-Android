@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
 import com.rafih.justfocus.data.local.repository.BlockedAppRepository
+import com.rafih.justfocus.data.local.repository.DataStoreRepository
 import com.rafih.justfocus.di.ServiceEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
@@ -16,20 +17,28 @@ import kotlinx.coroutines.launch
 class MyAccessbilityService: AccessibilityService() {
 
     private lateinit var blockedAppRepository: BlockedAppRepository
+    private lateinit var dataStoreRepository: DataStoreRepository
+
+    var isFocus = false
 
     override fun onServiceConnected() {
         super.onServiceConnected()
 
-        val dao = EntryPointAccessors.fromApplication(
+        val entryPoint = EntryPointAccessors.fromApplication(
             this,
             ServiceEntryPoint::class.java
-        ).provideBlockedAppDaoForService()
+        )
 
-        blockedAppRepository = BlockedAppRepository(dao)
+        blockedAppRepository = entryPoint.provideBlockedAppRepository()
+        dataStoreRepository = entryPoint.provideDataStoreRepository()
 
         CoroutineScope(Dispatchers.IO).launch {
-            blockedAppRepository.loadBlockedApps()
+            dataStoreRepository.focusModeStatus.collect {
+                isFocus = it
+            }
+            blockedAppRepository.loadBlockedApp()
         }
+
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
@@ -37,8 +46,7 @@ class MyAccessbilityService: AccessibilityService() {
 
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED){
             val packageName = event.packageName?.toString() ?: return
-
-            if(::blockedAppRepository.isInitialized && blockedAppRepository.isAppBlocked(packageName)){
+            if(::blockedAppRepository.isInitialized && blockedAppRepository.isAppBlocked(packageName) && isFocus){
 
                 val intent = Intent(Intent.ACTION_MAIN)
                 intent.addCategory(Intent.CATEGORY_HOME)
