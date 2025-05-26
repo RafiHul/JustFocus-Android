@@ -48,9 +48,6 @@ fun UsageStatsScreen(
     val packageManager = context.packageManager
 
     val dateSelected = usageStatsViewModel.dateSelected.collectAsState()
-    val barChartDataList = usageStatsViewModel.barChartDataList.collectAsState()
-
-    val dateSelectedBarParameterList = mutableListOf<BarParameters>()
     var selectedIndex by remember { mutableIntStateOf(-1) }
 
     LaunchedEffect(Unit) {
@@ -104,8 +101,6 @@ fun UsageStatsScreen(
                 }
             }
         }
-
-
     }
 }
 

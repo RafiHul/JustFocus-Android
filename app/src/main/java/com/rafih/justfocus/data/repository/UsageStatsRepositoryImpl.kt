@@ -9,8 +9,9 @@ import com.rafih.justfocus.domain.model.AppUsageGroup
 import com.rafih.justfocus.setCalendarTime
 import java.util.Calendar
 import javax.inject.Inject
+import javax.inject.Singleton
 
-
+@Singleton
 class UsageStatsRepositoryImpl @Inject constructor(): UsageStatsRepository{
 
     private val calendarToday = Calendar.getInstance()
