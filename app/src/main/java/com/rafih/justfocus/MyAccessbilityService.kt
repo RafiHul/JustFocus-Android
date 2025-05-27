@@ -6,8 +6,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.accessibility.AccessibilityEvent
 import android.widget.Toast
-import com.rafih.justfocus.data.repository.BlockedAppRepository
-import com.rafih.justfocus.data.repository.DataStoreRepository
+import com.rafih.justfocus.data.repository.BlockedAppRepositoryImpl
+import com.rafih.justfocus.data.repository.DataStoreRepositoryImpl
 import com.rafih.justfocus.di.ServiceEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 
 class MyAccessbilityService: AccessibilityService() {
 
-    private lateinit var blockedAppRepository: BlockedAppRepository
-    private lateinit var dataStoreRepository: DataStoreRepository
+    private lateinit var blockedAppRepository: BlockedAppRepositoryImpl
+    private lateinit var dataStoreRepository: DataStoreRepositoryImpl
 
     var isFocus = false
 

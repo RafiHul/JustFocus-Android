@@ -2,7 +2,7 @@ package com.rafih.justfocus.domain.usecase
 
 import android.content.pm.PackageManager
 import android.util.Log
-import com.rafih.justfocus.data.repository.BlockedAppRepository
+import com.rafih.justfocus.data.repository.BlockedAppRepositoryImpl
 import com.rafih.justfocus.data.model.BlockedApp
 import com.rafih.justfocus.domain.util.RoomResult
 import javax.inject.Inject
@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @Singleton
 class BlockedAppUseCase @Inject constructor(
-    private val repo: BlockedAppRepository
+    private val repo: BlockedAppRepositoryImpl
 ) {
 
     suspend fun addBlockedApp(packageNameList: MutableList<String>): RoomResult{

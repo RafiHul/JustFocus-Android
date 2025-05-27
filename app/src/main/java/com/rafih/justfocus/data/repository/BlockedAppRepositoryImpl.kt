@@ -7,7 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class BlockedAppRepository @Inject constructor(private val dao: BlockedAppDao) {
+class BlockedAppRepositoryImpl @Inject constructor(private val dao: BlockedAppDao) {
 
     private var chachedBlockedList: List<String> = emptyList()
 

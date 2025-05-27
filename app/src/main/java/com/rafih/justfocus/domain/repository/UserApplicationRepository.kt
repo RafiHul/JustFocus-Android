@@ -1,4 +1,4 @@
-package com.rafih.justfocus.data.repository
+package com.rafih.justfocus.domain.repository
 
 import android.content.Context
 import android.content.pm.ApplicationInfo

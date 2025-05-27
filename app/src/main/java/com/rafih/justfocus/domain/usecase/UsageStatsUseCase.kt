@@ -2,7 +2,7 @@ package com.rafih.justfocus.domain.usecase
 
 import android.content.Context
 import android.content.pm.PackageManager
-import com.rafih.justfocus.data.repository.UserApplicationRepository
+import com.rafih.justfocus.domain.repository.UserApplicationRepository
 import com.rafih.justfocus.domain.model.AppUsageGroup
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -5,7 +5,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DataStoreRepository @Inject constructor(
+class DataStoreRepositoryImpl @Inject constructor(
     private val dataStoreManager: DataStoreManager
 ) {
 

@@ -1,7 +1,7 @@
 package com.rafih.justfocus.di
 
-import com.rafih.justfocus.data.repository.BlockedAppRepository
-import com.rafih.justfocus.data.repository.DataStoreRepository
+import com.rafih.justfocus.data.repository.BlockedAppRepositoryImpl
+import com.rafih.justfocus.data.repository.DataStoreRepositoryImpl
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
@@ -10,6 +10,6 @@ import dagger.hilt.components.SingletonComponent
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 interface ServiceEntryPoint {
-    fun provideBlockedAppRepository(): BlockedAppRepository
-    fun provideDataStoreRepository(): DataStoreRepository
+    fun provideBlockedAppRepository(): BlockedAppRepositoryImpl
+    fun provideDataStoreRepository(): DataStoreRepositoryImpl
 }
