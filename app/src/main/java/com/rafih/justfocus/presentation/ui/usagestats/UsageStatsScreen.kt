@@ -1,5 +1,6 @@
 package com.rafih.justfocus.presentation.ui.usagestats
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,7 +10,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -34,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.aay.compose.barChart.model.BarParameters
+import com.rafih.justfocus.formatMillsDurationToString
 import com.rafih.justfocus.getDayName
 import com.rafih.justfocus.presentation.ui.usagestats.components.CardItemApp
 
@@ -79,41 +81,25 @@ fun UsageStatsScreen(
 
                         Column(Modifier.padding(24.dp)) {
                             Text("Total Usage", fontSize = 16.sp, color = Color.Black)
-                            Text(formatDuration(data.events.sumOf { it.appUsedTimeInMills }), color = Color.Black, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                            Text(data.events.sumOf { it.appUsedTimeInMills }.formatMillsDurationToString(), color = Color.Black, fontSize = 24.sp, fontWeight = FontWeight.Bold)
                         }
 
                     }
 
                     Text("Used Apps", fontSize = 22.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 16.dp))
 
-                    LazyColumn {
-                        itemsIndexed(data.events) { idx, items ->
+                    LazyColumn(state = rememberLazyListState(), modifier = Modifier.animateContentSize()) {
+                        items(items = data.events, key = { it.packageName} ) { items ->
                             if(items.appUsedTimeInMills >= 1000) {
-                                val otherAppInfo = packageManager.getApplicationInfo(items.packageName, 5)
-                                val otherAppIcon = packageManager.getApplicationIcon(otherAppInfo)
-                                val otherAppName = packageManager.getApplicationLabel(otherAppInfo).toString()
-                                val totalUsed = formatDuration(items.appUsedTimeInMills)
+                                val appInfo = packageManager.getApplicationInfo(items.packageName, 5)
+                                val totalUsedStringFormat = items.appUsedTimeInMills.formatMillsDurationToString()
 
-                                CardItemApp(otherAppIcon, otherAppName, totalUsed)
+                                CardItemApp(appInfo, packageManager, totalUsedStringFormat)
                             }
                         }
                     }
                 }
             }
         }
-    }
-}
-
-fun formatDuration(mills: Long): String {
-    val seconds = mills / 1000
-    val minutes = seconds / 60
-    val remainSeconds = seconds % 60
-    val hours = minutes / 60
-    val remainMinutes = minutes % 60
-
-    return when {
-        hours > 0 -> "${hours}h ${remainMinutes}m"
-        minutes > 0 -> "${minutes}m ${remainSeconds}s"
-        else -> "${seconds}s"
     }
 }

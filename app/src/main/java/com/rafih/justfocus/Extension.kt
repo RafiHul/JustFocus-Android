@@ -23,3 +23,17 @@ fun Calendar.setCalendarTime(hour: Int, minute: Int, second: Int){
     this.set(Calendar.SECOND, second)
     this.set(Calendar.MILLISECOND, 0)
 }
+
+fun Long.formatMillsDurationToString(): String {
+    val seconds = this / 1000
+    val minutes = seconds / 60
+    val remainSeconds = seconds % 60
+    val hours = minutes / 60
+    val remainMinutes = minutes % 60
+
+    return when {
+        hours > 0 -> "${hours}h ${remainMinutes}m"
+        minutes > 0 -> "${minutes}m ${remainSeconds}s"
+        else -> "${seconds}s"
+    }
+}

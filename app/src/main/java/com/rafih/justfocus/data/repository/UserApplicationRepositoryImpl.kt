@@ -3,6 +3,7 @@ package com.rafih.justfocus.data.repository
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import com.rafih.justfocus.domain.model.AppUsageEvent
 import com.rafih.justfocus.domain.model.AppUsageGroup
@@ -12,11 +13,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UsageStatsRepositoryImpl @Inject constructor(): UsageStatsRepository{
+class UserApplicationRepositoryImpl @Inject constructor(): UserApplicationRepository{
 
     private val calendarToday = Calendar.getInstance()
 
-    override suspend fun getWeeklyUsageStats(context: Context, pm: PackageManager): MutableList<AppUsageGroup> {
+    override suspend fun fetchWeeklyAppUsage(context: Context, pm: PackageManager): MutableList<AppUsageGroup> {
         val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
         val weekData = mutableListOf<AppUsageGroup>()
 
@@ -86,6 +87,11 @@ class UsageStatsRepositoryImpl @Inject constructor(): UsageStatsRepository{
         }
 
         return weekData
+    }
+
+    override suspend fun fetchAppInstalled(pm: PackageManager): List<ApplicationInfo?> {
+        return pm.getInstalledApplications(0)
+            .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) == 0 }
     }
 
 }

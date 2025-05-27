@@ -27,24 +27,24 @@ class UsageStatsViewModel @Inject constructor(
     private val _dateSelected = MutableStateFlow<AppUsageGroup?>(null)
     val dateSelected: StateFlow<AppUsageGroup?> = _dateSelected
 
-    private val _barChartDataList = MutableStateFlow<MutableList<AppUsageGroup>>(mutableListOf())
-    val barChartDataList: StateFlow<MutableList<AppUsageGroup>> = _barChartDataList
+    private val _weeklyUsageStatsData = MutableStateFlow<MutableList<AppUsageGroup>>(mutableListOf())
+    val weeklyUsageStatsData: StateFlow<MutableList<AppUsageGroup>> = _weeklyUsageStatsData
 
     fun loadUsageStatsData(context: Context, pm: PackageManager){
         viewModelScope.launch {
             usageStatsState = UsageStatsState.Loading
-            val result = usageStatsUseCase.getWeeklyUsageStats(context, pm)
-            _barChartDataList.value = result
+            val result = usageStatsUseCase.getWeeklyUsage(context, pm)
+            _weeklyUsageStatsData.value = result
             _dateSelected.value = result.find { it.date.get(Calendar.DAY_OF_MONTH) == Calendar.getInstance().get(Calendar.DAY_OF_MONTH) }  //get today data
             usageStatsState = UsageStatsState.Idle
         }
     }
 
     fun changeDateSelected(idx: Int){
-        if(idx !in 0..barChartDataList.value.size - 1){
+        if(idx !in 0..weeklyUsageStatsData.value.size - 1){
             return
         }
-        _dateSelected.value = barChartDataList.value[idx]
+        _dateSelected.value = weeklyUsageStatsData.value[idx]
     }
 
     sealed class UsageStatsState{

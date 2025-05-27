@@ -1,6 +1,7 @@
 package com.rafih.justfocus.presentation.ui.usagestats.components
 
-import android.graphics.drawable.Drawable
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,17 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
-import androidx.compose.material.icons.outlined.DateRange
-import androidx.compose.material.icons.rounded.ArrowForward
-import androidx.compose.material.icons.rounded.MoreVert
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,7 +31,16 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 
 @Composable
-fun CardItemApp(appIcon: Drawable, appName: String, appTotalUsed: String){
+fun CardItemApp(app: ApplicationInfo, pm: PackageManager, totalUsed: String){
+
+    val appIcon = remember(app.packageName) {
+        pm.getApplicationIcon(app)
+    }
+
+    val appLabel = remember(app.packageName) {
+        pm.getApplicationLabel(app).toString()
+    }
+
     Box(modifier = Modifier
         .background(Color.White)
         .fillMaxWidth()
@@ -52,8 +57,8 @@ fun CardItemApp(appIcon: Drawable, appName: String, appTotalUsed: String){
 
 
             Column(Modifier.padding(start = 16.dp)) {
-                Text(appName, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                Text(appTotalUsed, fontSize = 14.sp, fontFamily = FontFamily.Serif, fontStyle = FontStyle.Normal)
+                Text(appLabel, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(totalUsed, fontSize = 14.sp, fontFamily = FontFamily.Serif, fontStyle = FontStyle.Normal)
             }
 
             Spacer(Modifier.weight(1f))

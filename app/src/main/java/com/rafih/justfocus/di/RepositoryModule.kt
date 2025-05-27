@@ -1,7 +1,7 @@
 package com.rafih.justfocus.di
 
-import com.rafih.justfocus.data.repository.UsageStatsRepository
-import com.rafih.justfocus.data.repository.UsageStatsRepositoryImpl
+import com.rafih.justfocus.data.repository.UserApplicationRepository
+import com.rafih.justfocus.data.repository.UserApplicationRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +15,5 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideUsageStatsRepository(): UsageStatsRepository = UsageStatsRepositoryImpl()
+    fun provideUsageStatsRepository(): UserApplicationRepository = UserApplicationRepositoryImpl()
 }
