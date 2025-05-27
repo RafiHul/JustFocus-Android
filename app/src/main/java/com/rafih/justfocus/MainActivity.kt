@@ -71,7 +71,6 @@ class MainActivity : ComponentActivity() {
 
         val colonSplitter = TextUtils.SimpleStringSplitter(':')
         colonSplitter.setString(enabledService)
-        Log.d("cek colon", colonSplitter.toString())
 
         while(colonSplitter.hasNext()){
             val componentName = ComponentName.unflattenFromString(colonSplitter.next())

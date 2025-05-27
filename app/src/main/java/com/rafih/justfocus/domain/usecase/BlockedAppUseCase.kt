@@ -1,5 +1,6 @@
 package com.rafih.justfocus.domain.usecase
 
+import android.content.pm.PackageManager
 import android.util.Log
 import com.rafih.justfocus.data.repository.BlockedAppRepository
 import com.rafih.justfocus.data.model.BlockedApp
@@ -20,6 +21,15 @@ class BlockedAppUseCase @Inject constructor(
             }
             return RoomResult.Success("Success")
 
+        } catch (e: Exception){
+            Log.d("cek err", e.message.toString())
+            return RoomResult.Failed
+        }
+    }
+
+    suspend fun fetchBlockedApp(pm: PackageManager): RoomResult {
+        try {
+            return RoomResult.Success(repo.fetchBlockedApp(pm))
         } catch (e: Exception){
             Log.d("cek err", e.message.toString())
             return RoomResult.Failed
