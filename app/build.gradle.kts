@@ -74,4 +74,7 @@ dependencies {
 
     implementation("androidx.datastore:datastore-preferences:1.1.7")
     implementation("androidx.datastore:datastore-preferences-core:1.1.7")
+
+    implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
+
 }
