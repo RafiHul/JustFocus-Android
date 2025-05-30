@@ -8,7 +8,7 @@ interface BlockedAppRepository {
     var chachedBlockedList: List<String>
 
     suspend fun addBlockedApp(blockedApp: BlockedApp)
-    suspend fun deleteBlockedApp(blockedApp: BlockedApp)
+    suspend fun deleteAllBlockedApp()
     suspend fun loadBlockedApp()
     suspend fun fetchBlockedApp(pm: PackageManager): Set<String>
 
