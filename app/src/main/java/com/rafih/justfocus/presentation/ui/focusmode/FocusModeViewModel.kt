@@ -14,7 +14,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -80,6 +79,12 @@ class FocusModeViewModel @Inject constructor(
 
     fun removeSelectedApps(apps: ApplicationInfo){
         _selectedAppsPackages.value -= apps.packageName
+    }
+
+    fun addBlockedApp(){
+        viewModelScope.launch {
+            blockedAppUseCase.addBlockedApp(_selectedAppsPackages.value.toList())
+        }
     }
 
     sealed class FocusState{

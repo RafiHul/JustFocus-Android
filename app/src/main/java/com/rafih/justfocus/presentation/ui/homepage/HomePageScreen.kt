@@ -10,8 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun HomePageScreen(onNavigateToUsageStatsScreen: () -> Unit, onNavigateToFocusMode: () -> Unit){
-    Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
+fun HomePageScreen(modifier: Modifier, onNavigateToUsageStatsScreen: () -> Unit, onNavigateToFocusMode: () -> Unit){
+    Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxSize()) {
         Button(onClick = onNavigateToFocusMode) {
             Text("Focuss Mode")
         }
