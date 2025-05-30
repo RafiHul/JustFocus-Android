@@ -11,7 +11,11 @@ import javax.inject.Singleton
 class UsageStatsUseCase @Inject constructor(
     private val repo: UserApplicationRepository
 ){
-    suspend fun getWeeklyUsage(context: Context, pm: PackageManager): MutableList<AppUsageGroup> {
+    suspend fun fetchWeeklyAppUsage(context: Context, pm: PackageManager): MutableList<AppUsageGroup> {
         return repo.fetchWeeklyAppUsage(context, pm)
+    }
+
+    fun getWeeklyAppUsage(): List<AppUsageGroup> {
+        return repo.getChachedWeeklyUsage()
     }
 }

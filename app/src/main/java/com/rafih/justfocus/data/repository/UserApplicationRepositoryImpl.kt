@@ -16,9 +16,10 @@ import javax.inject.Singleton
 @Singleton
 class UserApplicationRepositoryImpl @Inject constructor(): UserApplicationRepository {
 
+    private var cacheWeeklyAppUsage: MutableList<AppUsageGroup> = mutableListOf()
     private val calendarToday = Calendar.getInstance()
 
-    override suspend fun fetchWeeklyAppUsage(context: Context, pm: PackageManager): MutableList<AppUsageGroup> {
+    override suspend fun fetchWeeklyAppUsage(context: Context, pm: PackageManager): MutableList<AppUsageGroup>{
         val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
         val weekData = mutableListOf<AppUsageGroup>()
 
@@ -87,12 +88,17 @@ class UserApplicationRepositoryImpl @Inject constructor(): UserApplicationReposi
             dayOfWeekCalendar.add(Calendar.DAY_OF_MONTH, 1)
         }
 
+        cacheWeeklyAppUsage = weekData
         return weekData
     }
 
     override suspend fun fetchAppInstalled(pm: PackageManager): List<ApplicationInfo?> {
         return pm.getInstalledApplications(0)
             .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) == 0 }
+    }
+
+    override fun getChachedWeeklyUsage(): List<AppUsageGroup> {
+        return cacheWeeklyAppUsage
     }
 
 }

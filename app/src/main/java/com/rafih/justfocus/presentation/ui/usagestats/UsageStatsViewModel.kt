@@ -33,7 +33,7 @@ class UsageStatsViewModel @Inject constructor(
     fun loadUsageStatsData(context: Context, pm: PackageManager){
         viewModelScope.launch {
             usageStatsState = UsageStatsState.Loading
-            val result = usageStatsUseCase.getWeeklyUsage(context, pm)
+            val result = usageStatsUseCase.fetchWeeklyAppUsage(context, pm)
             _weeklyUsageStatsData.value = result
             _dateSelected.value = result.find { it.date.get(Calendar.DAY_OF_MONTH) == Calendar.getInstance().get(Calendar.DAY_OF_MONTH) }  //get today data
             usageStatsState = UsageStatsState.Idle
