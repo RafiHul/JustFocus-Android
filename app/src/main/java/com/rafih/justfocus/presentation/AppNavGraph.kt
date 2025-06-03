@@ -1,6 +1,5 @@
 package com.rafih.justfocus.presentation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -8,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.rafih.justfocus.presentation.ui.appusagestats.AppUsageStatsScreen
 import com.rafih.justfocus.presentation.ui.stopwatch.Stopwatch
 import com.rafih.justfocus.presentation.ui.focusmode.FocusModeScreen
 import com.rafih.justfocus.presentation.ui.homepage.HomePageScreen
@@ -15,10 +15,13 @@ import com.rafih.justfocus.presentation.ui.usagestats.UsageStatsScreen
 
 sealed class AppRoute(val route: String){
     object Home: AppRoute("home_page_screen")
-    object UsageStast: AppRoute("usage_stats_screen")
+    object UsageStats: AppRoute("usage_stats_screen")
     object FocusMode: AppRoute("focus_mode_screen")
     object StopWatch: AppRoute("stopwatch_screen/{hour}/{minute}"){
         fun createRoute(hour: Int, minute: Int) = "stopwatch_screen/$hour/$minute"
+    }
+    object AppUsageStats: AppRoute("app_usage_stats_screen/{appPackageName}"){
+        fun createRoute(appPackageName: String) = "app_usage_stats_screen/$appPackageName"
     }
 }
 
@@ -33,7 +36,7 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
             HomePageScreen(
                 modifier,
                 onNavigateToUsageStatsScreen = {
-                    navController.navigate(AppRoute.UsageStast.route)
+                    navController.navigate(AppRoute.UsageStats.route)
                 },
                 onNavigateToFocusMode = {
                     navController.navigate(AppRoute.FocusMode.route)
@@ -41,15 +44,19 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
             )
         }
 
-        composable(AppRoute.UsageStast.route) {
-            UsageStatsScreen(modifier)
+        composable(AppRoute.UsageStats.route) {
+            UsageStatsScreen(modifier){
+                val nav = AppRoute.AppUsageStats.createRoute(it)
+                navController.navigate(nav)
+            }
         }
 
         composable(AppRoute.FocusMode.route) {
             FocusModeScreen(modifier){ hour, minute ->
-                Log.d("cek ini", minute.toString())
+
                 val nav = AppRoute.StopWatch.createRoute(hour, minute)
                 navController.navigate(nav)
+
             }
         }
 
@@ -71,6 +78,20 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
             Stopwatch(hour, minute, modifier) {
                 navController.popBackStack()
             }
+        }
+
+        composable(
+            route = AppRoute.AppUsageStats.route,
+            arguments = listOf(
+                navArgument("appPackageName") {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+
+            val appPackageName = backStackEntry.arguments?.getString("appPackageName") ?: ""
+            AppUsageStatsScreen(appPackageName, modifier)
+
         }
     }
 }

@@ -3,6 +3,7 @@ package com.rafih.justfocus.presentation.ui.usagestats.components
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +32,12 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 
 @Composable
-fun CardItemApp(app: ApplicationInfo, pm: PackageManager, totalUsed: String){
+fun CardItemApp(
+    app: ApplicationInfo,
+    pm: PackageManager,
+    totalUsed: String,
+    onNavigateToAppUsageStats: (String) -> Unit
+    ){
 
     val appIcon = remember(app.packageName) {
         pm.getApplicationIcon(app)
@@ -65,7 +71,10 @@ fun CardItemApp(app: ApplicationInfo, pm: PackageManager, totalUsed: String){
 
             Icon(
                 imageVector = Icons.AutoMirrored.Rounded.ArrowForward,
-                contentDescription = null
+                contentDescription = null,
+                modifier = Modifier.clickable{
+                    onNavigateToAppUsageStats(app.packageName)
+                }
             )
         }
     }

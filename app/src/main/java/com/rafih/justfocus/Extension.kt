@@ -17,6 +17,11 @@ fun Calendar.getDayName(): String {
     return sdf.format(this.time)
 }
 
+fun Calendar.formatDate(): String {
+    val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+    return sdf.format(this.time)
+}
+
 fun Calendar.setCalendarTime(hour: Int, minute: Int, second: Int){
     this.set(Calendar.HOUR_OF_DAY, hour)
     this.set(Calendar.MINUTE, minute)
