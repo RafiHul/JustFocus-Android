@@ -97,7 +97,7 @@ class UserApplicationRepositoryImpl @Inject constructor(): UserApplicationReposi
             .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) == 0 }
     }
 
-    override fun getChachedWeeklyUsage(): List<AppUsageGroup> {
+    override fun getCachedWeeklyUsage(): List<AppUsageGroup> {
         return cacheWeeklyAppUsage
     }
 

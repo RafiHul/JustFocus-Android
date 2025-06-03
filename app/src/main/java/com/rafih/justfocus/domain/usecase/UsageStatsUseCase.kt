@@ -15,7 +15,7 @@ class UsageStatsUseCase @Inject constructor(
         return repo.fetchWeeklyAppUsage(context, pm)
     }
 
-    fun getWeeklyAppUsage(): List<AppUsageGroup> {
-        return repo.getChachedWeeklyUsage()
+    fun getCachedWeeklyUsage(): List<AppUsageGroup> {
+        return repo.getCachedWeeklyUsage()
     }
 }

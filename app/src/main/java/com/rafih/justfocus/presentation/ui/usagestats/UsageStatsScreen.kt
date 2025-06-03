@@ -43,7 +43,8 @@ import com.rafih.justfocus.presentation.ui.usagestats.components.CardItemApp
 @Composable
 fun UsageStatsScreen(
     modifier: Modifier,
-    usageStatsViewModel: UsageStatsViewModel = hiltViewModel()
+    usageStatsViewModel: UsageStatsViewModel = hiltViewModel(),
+    onNavigateToAppUsageStats: (String) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -94,7 +95,9 @@ fun UsageStatsScreen(
                                 val appInfo = packageManager.getApplicationInfo(items.packageName, 5)
                                 val totalUsedStringFormat = items.appUsedTimeInMills.formatMillsDurationToString()
 
-                                CardItemApp(appInfo, packageManager, totalUsedStringFormat)
+                                CardItemApp(appInfo, packageManager, totalUsedStringFormat){
+                                    onNavigateToAppUsageStats(it)
+                                }
                             }
                         }
                     }
