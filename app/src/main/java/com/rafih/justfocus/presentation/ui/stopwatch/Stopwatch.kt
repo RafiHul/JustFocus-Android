@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.rafih.justfocus.domain.model.StopwatchDuration
 
 @Composable
 fun Stopwatch(
@@ -21,23 +20,20 @@ fun Stopwatch(
     navigateBack: () -> Unit
 ) {
 
-    val time = viewModel.counter.collectAsState()
+    val time = viewModel.stopwatchState.collectAsState()
 
     LaunchedEffect(Unit) {
-
-        if(hour != 0 || minute != 0){
-            viewModel.setStopwatchDuration(StopwatchDuration(hour, minute))
-        }
-
+        viewModel.loadStopwatchState()
         viewModel.startStopwatch()
     }
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(time.value.toString())
+        Text(time.value.let { String.format("%02d:%02d:%02d", it.hours, it.minutes, it.seconds) })
 
         Button(onClick = {
-            viewModel.stopFocusAndStopwatch()
+//            viewModel.stopFocusAndStopwatch()
+            viewModel.stopStopwatch()
             navigateBack()
         }) {
             Text("Stop Focus")
