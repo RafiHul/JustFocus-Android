@@ -4,5 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface DataStoreRepository{
     val focusModeStatus: Flow<Boolean>
-    suspend fun setFocusModeEnabled(enabled: Boolean)
+    suspend fun setFocusModeStatus(status: Boolean)
 }

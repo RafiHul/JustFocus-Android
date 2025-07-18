@@ -12,8 +12,8 @@ class DataStoreRepositoryImpl @Inject constructor(
 
     override val focusModeStatus = dataStoreManager.focusModeStatus
 
-    override suspend fun setFocusModeEnabled(enabled: Boolean){
-        dataStoreManager.setFocusModeEnabled(enabled)
+    override suspend fun setFocusModeStatus(status: Boolean){
+        dataStoreManager.setFocusModeStatus(status)
     }
 
 }

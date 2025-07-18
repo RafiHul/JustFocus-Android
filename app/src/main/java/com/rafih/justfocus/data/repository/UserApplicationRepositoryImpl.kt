@@ -30,7 +30,7 @@ class UserApplicationRepositoryImpl @Inject constructor(): UserApplicationReposi
             val day = dayOfWeekCalendar.clone() as Calendar
             day.setCalendarTime(0, 0, 0)
 
-            var startTime = day.timeInMillis
+            val startTime = day.timeInMillis
             var endTime = System.currentTimeMillis() //this time and today
 
             if (day.get(Calendar.DAY_OF_MONTH) != calendarToday.get(Calendar.DAY_OF_MONTH)) { //if not today

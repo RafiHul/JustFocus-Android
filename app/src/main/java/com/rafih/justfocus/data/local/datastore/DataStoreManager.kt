@@ -23,7 +23,7 @@ class DataStoreManager @Inject constructor(
         preferences[FOCUS_MODE_KEY] ?: false
     }
 
-    suspend fun setFocusModeEnabled(enabled: Boolean){
+    suspend fun setFocusModeStatus(enabled: Boolean){
         context.dataStore.edit {
             it[FOCUS_MODE_KEY] = enabled
         }
