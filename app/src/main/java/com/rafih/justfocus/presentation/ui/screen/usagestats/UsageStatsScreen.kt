@@ -1,4 +1,4 @@
-package com.rafih.justfocus.presentation.ui.usagestats
+package com.rafih.justfocus.presentation.ui.screen.usagestats
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
@@ -38,7 +38,7 @@ import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rafih.justfocus.formatMillsDurationToString
 import com.rafih.justfocus.getDayName
-import com.rafih.justfocus.presentation.ui.usagestats.components.CardItemApp
+import com.rafih.justfocus.presentation.ui.screen.usagestats.components.CardItemApp
 
 @Composable
 fun UsageStatsScreen(

@@ -1,4 +1,4 @@
-package com.rafih.justfocus.presentation.ui.usagestats
+package com.rafih.justfocus.presentation.ui.screen.usagestats
 
 import android.content.Context
 import android.content.pm.PackageManager

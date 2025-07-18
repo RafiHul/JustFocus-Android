@@ -1,4 +1,4 @@
-package com.rafih.justfocus.presentation.ui.focusmode
+package com.rafih.justfocus.presentation.ui.screen.focusmode
 
 import android.app.TimePickerDialog
 import android.widget.Toast
@@ -24,8 +24,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rafih.justfocus.domain.model.UiEvent
-import com.rafih.justfocus.presentation.ui.focusmode.component.CardItemApp
-import com.rafih.justfocus.presentation.ui.focusmode.component.StopwatchDurationPickerDialog
+import com.rafih.justfocus.presentation.ui.screen.focusmode.component.CardItemApp
+import com.rafih.justfocus.presentation.ui.screen.focusmode.component.StopwatchDurationPickerDialog
 import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalTime
 import java.util.Calendar

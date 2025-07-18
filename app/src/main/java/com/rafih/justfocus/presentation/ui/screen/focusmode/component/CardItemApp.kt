@@ -1,4 +1,4 @@
-package com.rafih.justfocus.presentation.ui.focusmode.component
+package com.rafih.justfocus.presentation.ui.screen.focusmode.component
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager

@@ -1,4 +1,4 @@
-package com.rafih.justfocus.presentation.ui.stopwatch
+package com.rafih.justfocus.presentation.ui.screen.stopwatch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

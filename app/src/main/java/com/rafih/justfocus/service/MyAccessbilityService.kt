@@ -1,4 +1,4 @@
-package com.rafih.justfocus
+package com.rafih.justfocus.service
 
 import android.accessibilityservice.AccessibilityService
 import android.content.Intent

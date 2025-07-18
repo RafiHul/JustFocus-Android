@@ -1,4 +1,4 @@
-package com.rafih.justfocus.presentation.ui.theme
+package com.rafih.justfocus.presentation.ui.screen.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

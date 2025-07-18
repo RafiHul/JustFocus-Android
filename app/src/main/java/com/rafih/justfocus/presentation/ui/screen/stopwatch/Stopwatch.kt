@@ -1,4 +1,4 @@
-package com.rafih.justfocus.presentation.ui.stopwatch
+package com.rafih.justfocus.presentation.ui.screen.stopwatch
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement

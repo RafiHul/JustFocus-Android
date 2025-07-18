@@ -1,4 +1,4 @@
-package com.rafih.justfocus.presentation.ui.homepage
+package com.rafih.justfocus.presentation.ui.screen.homepage
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

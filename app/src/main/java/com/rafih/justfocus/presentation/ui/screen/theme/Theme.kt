@@ -1,4 +1,4 @@
-package com.rafih.justfocus.presentation.ui.theme
+package com.rafih.justfocus.presentation.ui.screen.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

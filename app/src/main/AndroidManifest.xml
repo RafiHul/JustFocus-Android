@@ -33,7 +33,7 @@
         </activity>
 
         <service
-            android:name=".MyAccessbilityService"
+            android:name=".service.MyAccessbilityService"
             android:exported="true"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>

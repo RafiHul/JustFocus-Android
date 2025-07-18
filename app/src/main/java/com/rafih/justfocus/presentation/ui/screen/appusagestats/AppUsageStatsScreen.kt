@@ -1,4 +1,4 @@
-package com.rafih.justfocus.presentation.ui.appusagestats
+package com.rafih.justfocus.presentation.ui.screen.appusagestats
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

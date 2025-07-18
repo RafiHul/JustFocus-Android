@@ -7,11 +7,11 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.rafih.justfocus.presentation.ui.appusagestats.AppUsageStatsScreen
-import com.rafih.justfocus.presentation.ui.stopwatch.Stopwatch
-import com.rafih.justfocus.presentation.ui.focusmode.FocusModeScreen
-import com.rafih.justfocus.presentation.ui.homepage.HomePageScreen
-import com.rafih.justfocus.presentation.ui.usagestats.UsageStatsScreen
+import com.rafih.justfocus.presentation.ui.screen.appusagestats.AppUsageStatsScreen
+import com.rafih.justfocus.presentation.ui.screen.stopwatch.Stopwatch
+import com.rafih.justfocus.presentation.ui.screen.focusmode.FocusModeScreen
+import com.rafih.justfocus.presentation.ui.screen.homepage.HomePageScreen
+import com.rafih.justfocus.presentation.ui.screen.usagestats.UsageStatsScreen
 
 sealed class AppRoute(val route: String){
     object Home: AppRoute("home_page_screen")

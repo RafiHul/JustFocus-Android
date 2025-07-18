@@ -1,4 +1,4 @@
-package com.rafih.justfocus.presentation.ui.appusagestats
+package com.rafih.justfocus.presentation.ui.screen.appusagestats
 
 import android.icu.util.Calendar
 import androidx.compose.runtime.getValue
