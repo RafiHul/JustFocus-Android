@@ -12,7 +12,7 @@ import com.rafih.justfocus.domain.model.UiEvent
 import com.rafih.justfocus.domain.usecase.UserInstalledAppsUseCase
 import com.rafih.justfocus.domain.usecase.blockedapp.FetchBlockedAppUseCase
 import com.rafih.justfocus.domain.usecase.blockedapp.InsertBatchBlockedAppUseCase
-import com.rafih.justfocus.domain.util.RoomResult
+import com.rafih.justfocus.domain.model.handle.RoomResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

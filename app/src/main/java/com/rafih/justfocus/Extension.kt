@@ -1,7 +1,7 @@
 package com.rafih.justfocus
 
 import com.rafih.justfocus.domain.model.UiEvent
-import com.rafih.justfocus.domain.util.RoomResult
+import com.rafih.justfocus.domain.model.handle.RoomResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import java.text.SimpleDateFormat
 import java.util.Calendar

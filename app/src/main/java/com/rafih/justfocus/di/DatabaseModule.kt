@@ -26,4 +26,7 @@ object DatabaseModule {
 
     @Provides
     fun provideBlockedAppDao(db: AppDatabase) = db.blockedAppDao()
+
+    @Provides
+    fun provideFocusHistoryDao(db: AppDatabase) = db.focusHistoryDao()
 }

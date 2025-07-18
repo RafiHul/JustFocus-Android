@@ -5,7 +5,7 @@ import com.rafih.justfocus.data.repository.StopwatchRepositoryImpl
 import com.rafih.justfocus.domain.model.StopwatchDuration
 import com.rafih.justfocus.domain.model.StopwatchState
 import com.rafih.justfocus.domain.usecase.blockedapp.DeleteBlockedAppUseCase
-import com.rafih.justfocus.domain.util.RoomResult
+import com.rafih.justfocus.domain.model.handle.RoomResult
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

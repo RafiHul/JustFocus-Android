@@ -2,7 +2,7 @@ package com.rafih.justfocus.domain.usecase.blockedapp
 
 import com.rafih.justfocus.data.repository.BlockedAppRepositoryImpl
 import com.rafih.justfocus.data.repository.DataStoreRepositoryImpl
-import com.rafih.justfocus.domain.util.RoomResult
+import com.rafih.justfocus.domain.model.handle.RoomResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
