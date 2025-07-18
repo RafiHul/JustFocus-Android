@@ -1,5 +1,8 @@
 package com.rafih.justfocus
 
+import com.rafih.justfocus.domain.model.UiEvent
+import com.rafih.justfocus.domain.util.RoomResult
+import kotlinx.coroutines.flow.MutableSharedFlow
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -40,5 +43,13 @@ fun Long.formatMillsDurationToString(): String {
         hours > 0 -> "${hours}h ${remainMinutes}m"
         minutes > 0 -> "${minutes}m ${remainSeconds}s"
         else -> "${seconds}s"
+    }
+}
+
+
+suspend fun RoomResult.handleUiEvent(uiEventState: MutableSharedFlow<UiEvent>, callBackSuccess: () -> Unit){
+    when(this) {
+        is RoomResult.Failed -> uiEventState.emit(UiEvent.ShowToast(this.message))
+        is RoomResult.Success<*> -> callBackSuccess()
     }
 }
