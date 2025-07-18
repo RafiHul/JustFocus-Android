@@ -5,16 +5,17 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.rafih.justfocus.MainActivity
 import com.rafih.justfocus.R
 import com.rafih.justfocus.domain.connector.StopwatchServiceConnector
+import com.rafih.justfocus.domain.model.StopwatchDuration
 import com.rafih.justfocus.domain.model.StopwatchState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +27,8 @@ class StopwatchService: Service() {
 
     private val _stopwatchState = MutableStateFlow(StopwatchState(isRunning = false))
     val stopwatchState: Flow<StopwatchState> = _stopwatchState
+
+    private val _stopwatchDuration = MutableStateFlow<StopwatchDuration?>(null)
 
     private var stopwatchRunnable = object : Runnable {
         override fun run() {
@@ -45,9 +48,11 @@ class StopwatchService: Service() {
                     hours++
                 }
 
-                updateNotification()
-                _stopwatchState.value = StopwatchState(true, seconds, minutes, hours)
+                checkStopWatchDuration(minutes, hours)
+
+                _stopwatchState.value = _stopwatchState.value.copy(seconds = seconds, minutes =  minutes, hours = hours)
                 handler.postDelayed(this, 1000)
+                updateNotification()
             }
         }
     }
@@ -74,7 +79,9 @@ class StopwatchService: Service() {
         fun getService(): StopwatchService = this@StopwatchService
 
         override fun startStopwatch() {
+
             if (!_stopwatchState.value.isRunning) {
+                Log.d("cekrunning", "masuk here")
                 _stopwatchState.value = _stopwatchState.value.copy(isRunning = true)
                 handler.post(stopwatchRunnable)
             }
@@ -88,11 +95,15 @@ class StopwatchService: Service() {
         }
 
         override fun stopStopwatch() {
-            pauseStopwatch()
             _stopwatchState.value = StopwatchState(isRunning = false)
+            _stopwatchDuration.value = null
+            handler.removeCallbacks(stopwatchRunnable)
             updateNotification()
-            stopSelf()
-        } // TODO: tanyakan soal stop apakah pake stopself()
+        }
+
+        override fun setStopwatchDuration(stopwatchDuration: StopwatchDuration) {
+            _stopwatchDuration.value = stopwatchDuration
+        }
 
         override fun getStopwatchState() = stopwatchState
     }
@@ -131,6 +142,16 @@ class StopwatchService: Service() {
     private fun updateNotification() {
         getSystemService(NotificationManager::class.java)
             .notify(NOTIFICATION_ID, createNotification())
+    }
+
+    // TODO: ada bug ketika navigate back, terus pencet fokus lagi, second nya + 1
+    // TODO: notifikasi tidak tereset ketika stop focus di tekan
+    private fun checkStopWatchDuration(minutes: Int, hours: Int){
+        _stopwatchDuration.value?.let {
+            if(it.hour == hours && it.minute == minutes){
+                binder.pauseStopwatch()
+            }
+        }
     }
 
     private companion object{

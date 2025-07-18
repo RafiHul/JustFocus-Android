@@ -7,6 +7,7 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import com.rafih.justfocus.service.StopwatchService
 import com.rafih.justfocus.domain.connector.StopwatchServiceConnector
+import com.rafih.justfocus.domain.model.StopwatchDuration
 import com.rafih.justfocus.domain.model.StopwatchState
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +23,7 @@ class StopwatchRepositoryImpl @Inject constructor(
 ): StopwatchServiceConnector {
 
     private var serviceConnector : StopwatchServiceConnector? = null
+    private var isServiceBound = false
 
     private val _serviceConnected = MutableSharedFlow<Boolean>(replay = 1)
     val serviceConnected: Flow<Boolean> = _serviceConnected.asSharedFlow()
@@ -32,25 +34,32 @@ class StopwatchRepositoryImpl @Inject constructor(
             service: IBinder?
         ) {
             serviceConnector = (service as StopwatchService.StopwatchServiceBinder)
+            isServiceBound = true
             _serviceConnected.tryEmit(true)
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
             serviceConnector = null
+            isServiceBound = false
             _serviceConnected.tryEmit(false)
         }
     }
 
-    fun bindService(){
-        val intent = Intent(context, StopwatchService::class.java)
-        context.startForegroundService(intent)
-        context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    fun bindService() {
+        if (!isServiceBound) {
+            val intent = Intent(context, StopwatchService::class.java)
+            context.startForegroundService(intent)
+            context.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+        }
     }
 
     fun unbindService(){ //use for stop stopwatch
-        if(serviceConnector != null){
+        if (isServiceBound && serviceConnector != null) {
             context.unbindService(serviceConnection)
+            context.stopService(Intent(context, StopwatchService::class.java))
             serviceConnector = null
+            isServiceBound = false
+            _serviceConnected.tryEmit(false)
         }
     }
 
@@ -68,7 +77,11 @@ class StopwatchRepositoryImpl @Inject constructor(
         serviceConnector?.pauseStopwatch()
     }
 
+    override fun setStopwatchDuration(stopwatchDuration: StopwatchDuration) {
+        serviceConnector?.setStopwatchDuration(stopwatchDuration)
+    }
+
     override fun getStopwatchState(): Flow<StopwatchState> {
-        return serviceConnector?.getStopwatchState() ?: MutableStateFlow<StopwatchState>(StopwatchState(false))
+        return serviceConnector?.getStopwatchState() ?: MutableStateFlow(StopwatchState(false))
     }
 }

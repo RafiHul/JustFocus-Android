@@ -5,13 +5,13 @@ import com.rafih.justfocus.data.model.BlockedApp
 
 interface BlockedAppRepository {
 
-    var chachedBlockedList: List<String>
+    var chachedBlockedAppPackageName: List<String>
 
     suspend fun addBlockedApp(blockedApp: BlockedApp)
+    suspend fun addBatchBlockedApp(blockedAppList: List<BlockedApp>)
     suspend fun deleteAllBlockedApp()
     suspend fun loadBlockedApp()
     suspend fun fetchBlockedApp(pm: PackageManager): Set<String>
-
     fun isAppBlocked(packageName: String): Boolean
 
 

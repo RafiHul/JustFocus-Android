@@ -2,16 +2,21 @@ package com.rafih.justfocus.presentation.ui.focusmode
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rafih.justfocus.domain.usecase.BlockedAppUseCase
+import com.rafih.justfocus.domain.model.UiEvent
 import com.rafih.justfocus.domain.usecase.UserInstalledAppsUseCase
+import com.rafih.justfocus.domain.usecase.blockedapp.FetchBlockedAppUseCase
+import com.rafih.justfocus.domain.usecase.blockedapp.InsertBatchBlockedAppUseCase
 import com.rafih.justfocus.domain.util.RoomResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -21,12 +26,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FocusModeViewModel @Inject constructor(
-    private val blockedAppUseCase: BlockedAppUseCase,
+    private val insertBatchBlockedAppUseCase: InsertBatchBlockedAppUseCase,
+    private val fetchBlockedAppUseCase: FetchBlockedAppUseCase,
     private val userInstalledAppsUseCase: UserInstalledAppsUseCase
 ): ViewModel(){
 
     var focusState by mutableStateOf<FocusState>(FocusState.Loading)
         private set
+
+    private val _uiEvent = MutableSharedFlow<UiEvent>()
+    val uiEvent: SharedFlow<UiEvent> = _uiEvent
 
     private val _selectedAppsPackages = MutableStateFlow<Set<String>>(emptySet())
     val selectedAppsPackages: StateFlow<Set<String>> = _selectedAppsPackages
@@ -62,13 +71,17 @@ class FocusModeViewModel @Inject constructor(
             focusState = FocusState.Loading
 
             _allApps.value = userInstalledAppsUseCase.loadInstalledUserApps(pm).filterNotNull()
+            val dat = fetchBlockedAppUseCase(pm)
+            _selectedAppsPackages.value = dat
+            Log.d("cek iss", dat.toString())
 
-            val res = blockedAppUseCase.fetchBlockedApp(pm)
-            if(res is RoomResult.Success<*>){
-                val blockedApps = res.data as Set<String>
-                _selectedAppsPackages.value = blockedApps
-            }
             focusState = FocusState.Idle
+//            val res = blockedAppUseCase.fetchBlockedApp(pm)
+//            if(res is RoomResult.Success<*>){
+//                val blockedApps = res.data as Set<String>
+//                _selectedAppsPackages.value = blockedApps
+//            }
+//            focusState = FocusState.Idle
         }
     }
 
@@ -81,9 +94,18 @@ class FocusModeViewModel @Inject constructor(
         _selectedAppsPackages.value -= apps.packageName
     }
 
-    fun addBlockedApp(){
+    fun beginToFocusMode(callbackSuccess: () -> Unit) {
+        Log.d("cek isi", _selectedAppsPackages.value.toString())
         viewModelScope.launch {
-            blockedAppUseCase.addBlockedApp(_selectedAppsPackages.value.toList())
+            insertBatchBlockedAppUseCase.byPackageName(_selectedAppsPackages.value.toList())
+                .collect {
+                    when (it) {
+                        is RoomResult.Failed -> _uiEvent.emit(UiEvent.ShowToast(it.message))
+                        is RoomResult.Success<*> -> {
+                            callbackSuccess()
+                        }// TODO: kalo gk mau berpindah berarti dari ini
+                    }
+                }
         }
     }
 

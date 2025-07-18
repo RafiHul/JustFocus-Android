@@ -13,6 +13,9 @@ interface BlockedAppDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addBlockedApp(blockedApp: BlockedApp)
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addBatchBlockedApp(blockedAppList: List<BlockedApp>)
+
     @Query("DELETE FROM blocked_app")
     suspend fun deleteAllBlockedApp()
 

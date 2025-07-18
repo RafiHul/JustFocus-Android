@@ -1,22 +1,16 @@
 package com.rafih.justfocus.presentation.ui.focusmode
 
 import android.app.TimePickerDialog
+import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,17 +19,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.commandiron.wheel_picker_compose.WheelTimePicker
+import com.rafih.justfocus.domain.model.UiEvent
 import com.rafih.justfocus.presentation.ui.focusmode.component.CardItemApp
 import com.rafih.justfocus.presentation.ui.focusmode.component.StopwatchDurationPickerDialog
-import java.time.LocalDate
+import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalTime
 import java.util.Calendar
 import java.util.Date
@@ -54,11 +45,19 @@ fun FocusModeScreen(
 
     var selectedFocusDate by remember { mutableStateOf<Date?>(null) }
     var stopwatchDuration by remember { mutableStateOf<LocalTime>(LocalTime.of(0, 0, 0)) }
-    var showStopwatchDurationPickerDialog by remember { mutableStateOf(false) }
+    var showStopwatchDurationPickerDialog by remember { mutableStateOf(false) }  // TODO: move this to view model
 
     val calendar = Calendar.getInstance()
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
     val minutes = calendar.get(Calendar.MINUTE)
+
+    LaunchedEffect(Unit) {
+        focusModeViewModel.uiEvent.collectLatest {
+            when(it){
+                is UiEvent.ShowToast -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     val timePickerDialog = remember {
         TimePickerDialog(context, {_, selectedHour, selectedMinute ->
@@ -81,8 +80,9 @@ fun FocusModeScreen(
             FocusModeViewModel.FocusState.Idle -> {
 
                 Button(onClick = {
-                    focusModeViewModel.addBlockedApp()
-                    stopwatchDuration.let { onNavigateToStopWatch(it.hour, it.minute) }
+                    focusModeViewModel.beginToFocusMode {
+                        stopwatchDuration.let { onNavigateToStopWatch(it.hour, it.minute) }
+                    }
                 }) {
                     Text("Focus")
                 }
@@ -123,11 +123,7 @@ fun FocusModeScreen(
         StopwatchDurationPickerDialog(
             onDismissRequest = { showStopwatchDurationPickerDialog = false },
             onConfirmRequest = { time ->
-
-                if (time.hour != 0 || time.minute != 0){
-                    stopwatchDuration = time
-                }
-
+                stopwatchDuration = time
                 showStopwatchDurationPickerDialog = false
             }
         )
