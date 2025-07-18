@@ -42,10 +42,10 @@ fun FocusModeScreen(
 
     val selectedApps = focusModeViewModel.selectedApps.collectAsState()
     val unselectedApps = focusModeViewModel.unselectedApps.collectAsState()
+    val showStopWatchDurationPickerDialog = focusModeViewModel.showStopWatchDurationPickerDialog
 
     var selectedFocusDate by remember { mutableStateOf<Date?>(null) }
     var stopwatchDuration by remember { mutableStateOf<LocalTime>(LocalTime.of(0, 0, 0)) }
-    var showStopwatchDurationPickerDialog by remember { mutableStateOf(false) }  // TODO: move this to view model
 
     val calendar = Calendar.getInstance()
     val hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -87,7 +87,7 @@ fun FocusModeScreen(
                     Text("Focus")
                 }
 
-                Button(onClick = { showStopwatchDurationPickerDialog = true }) {
+                Button(onClick = { focusModeViewModel.showPickerDialog() }) {
                     Text("Pick Time")
                 }
 
@@ -119,12 +119,12 @@ fun FocusModeScreen(
         }
     }
 
-    if (showStopwatchDurationPickerDialog){
+    if (showStopWatchDurationPickerDialog){
         StopwatchDurationPickerDialog(
-            onDismissRequest = { showStopwatchDurationPickerDialog = false },
+            onDismissRequest = { focusModeViewModel.closePickerDialog() },
             onConfirmRequest = { time ->
                 stopwatchDuration = time
-                showStopwatchDurationPickerDialog = false
+                focusModeViewModel.closePickerDialog()
             }
         )
     }

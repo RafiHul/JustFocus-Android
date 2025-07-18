@@ -34,6 +34,9 @@ class FocusModeViewModel @Inject constructor(
     var focusState by mutableStateOf<FocusState>(FocusState.Loading)
         private set
 
+    var showStopWatchDurationPickerDialog by mutableStateOf(false)
+        private set
+
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent: SharedFlow<UiEvent> = _uiEvent
 
@@ -73,15 +76,8 @@ class FocusModeViewModel @Inject constructor(
             _allApps.value = userInstalledAppsUseCase.loadInstalledUserApps(pm).filterNotNull()
             val dat = fetchBlockedAppUseCase(pm)
             _selectedAppsPackages.value = dat
-            Log.d("cek iss", dat.toString())
 
             focusState = FocusState.Idle
-//            val res = blockedAppUseCase.fetchBlockedApp(pm)
-//            if(res is RoomResult.Success<*>){
-//                val blockedApps = res.data as Set<String>
-//                _selectedAppsPackages.value = blockedApps
-//            }
-//            focusState = FocusState.Idle
         }
     }
 
@@ -103,10 +99,18 @@ class FocusModeViewModel @Inject constructor(
                         is RoomResult.Failed -> _uiEvent.emit(UiEvent.ShowToast(it.message))
                         is RoomResult.Success<*> -> {
                             callbackSuccess()
-                        }// TODO: kalo gk mau berpindah berarti dari ini
+                        }
                     }
                 }
         }
+    }
+
+    fun showPickerDialog(){
+        showStopWatchDurationPickerDialog = true
+    }
+
+    fun closePickerDialog(){
+        showStopWatchDurationPickerDialog = false
     }
 
     sealed class FocusState{
