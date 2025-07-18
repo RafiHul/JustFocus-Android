@@ -6,7 +6,6 @@ import com.rafih.justfocus.domain.model.StopwatchDuration
 import com.rafih.justfocus.domain.model.StopwatchState
 import com.rafih.justfocus.domain.model.UiEvent
 import com.rafih.justfocus.domain.usecase.stopwatch.StopwatchUseCase
-import com.rafih.justfocus.domain.usecase.blockedapp.DeleteBlockedAppUseCase
 import com.rafih.justfocus.domain.usecase.stopwatch.StartStopwatchUseCase
 import com.rafih.justfocus.handleUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -40,7 +40,6 @@ class StopwatchUseCase @Inject constructor(
         stopWatchRepository.unbindService()
 
         emit(RoomResult.Success(null))
-
     }.catch {
         emit(RoomResult.Failed( it.message ?: "Terjadi Kesalahan tidak terduga"))
     }

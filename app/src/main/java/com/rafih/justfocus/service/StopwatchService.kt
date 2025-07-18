@@ -10,7 +10,6 @@ import android.os.Binder
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.rafih.justfocus.MainActivity
 import com.rafih.justfocus.R
@@ -81,7 +80,6 @@ class StopwatchService: Service() {
         override fun startStopwatch() {
 
             if (!_stopwatchState.value.isRunning) {
-                Log.d("cekrunning", "masuk here")
                 _stopwatchState.value = _stopwatchState.value.copy(isRunning = true)
                 handler.post(stopwatchRunnable)
             }
@@ -144,11 +142,9 @@ class StopwatchService: Service() {
             .notify(NOTIFICATION_ID, createNotification())
     }
 
-    // TODO: ada bug ketika navigate back, terus pencet fokus lagi, second nya + 1
-    // TODO: notifikasi tidak tereset ketika stop focus di tekan
     private fun checkStopWatchDuration(minutes: Int, hours: Int){
         _stopwatchDuration.value?.let {
-            if(it.hour == hours && it.minute == minutes){
+            if(hours >= it.hour && minutes >= it.minute){
                 binder.pauseStopwatch()
             }
         }
