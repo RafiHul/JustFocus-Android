@@ -20,7 +20,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.compose.rememberNavController
 import com.rafih.justfocus.presentation.AppNavGraph
-import com.rafih.justfocus.presentation.ui.screen.theme.JustFocusTheme
+import com.rafih.justfocus.presentation.ui.theme.JustFocusTheme
 import com.rafih.justfocus.service.MyAccessbilityService
 import dagger.hilt.android.AndroidEntryPoint
 

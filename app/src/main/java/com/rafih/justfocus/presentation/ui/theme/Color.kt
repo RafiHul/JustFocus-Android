@@ -1,4 +1,4 @@
-package com.rafih.justfocus.presentation.ui.screen.theme
+package com.rafih.justfocus.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
