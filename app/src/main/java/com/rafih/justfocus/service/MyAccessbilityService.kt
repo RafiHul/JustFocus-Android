@@ -18,7 +18,6 @@ class MyAccessbilityService: AccessibilityService() {
 
     private lateinit var blockedAppRepository: BlockedAppRepositoryImpl
     private lateinit var dataStoreRepository: DataStoreRepositoryImpl
-
     var isFocus = false
 
     override fun onServiceConnected() {
