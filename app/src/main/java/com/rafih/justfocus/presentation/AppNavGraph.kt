@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.rafih.justfocus.presentation.ui.screen.appusagestats.AppUsageStatsScreen
+import com.rafih.justfocus.presentation.ui.screen.focushistory.FocusHistory
 import com.rafih.justfocus.presentation.ui.screen.stopwatch.Stopwatch
 import com.rafih.justfocus.presentation.ui.screen.focusmode.FocusModeScreen
 import com.rafih.justfocus.presentation.ui.screen.homepage.HomePageScreen
@@ -17,6 +18,7 @@ sealed class AppRoute(val route: String){
     object Home: AppRoute("home_page_screen")
     object UsageStats: AppRoute("usage_stats_screen")
     object FocusMode: AppRoute("focus_mode_screen")
+    object FocusHistory: AppRoute("focus_history_screen")
     object StopWatch: AppRoute("stopwatch_screen/{hour}/{minute}"){
         fun createRoute(hour: Int, minute: Int) = "stopwatch_screen/$hour/$minute"
     }
@@ -40,6 +42,9 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
                 },
                 onNavigateToFocusMode = {
                     navController.navigate(AppRoute.FocusMode.route)
+                },
+                onNavigateToFocusHistory = {
+                    navController.navigate(AppRoute.FocusHistory.route)
                 }
             )
         }
@@ -58,6 +63,10 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
                 navController.navigate(nav)
 
             }
+        }
+
+        composable(AppRoute.FocusHistory.route){
+            FocusHistory(modifier)
         }
 
         composable(
