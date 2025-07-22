@@ -21,12 +21,11 @@ class AddFocusHistoryUseCase @Inject constructor(
         val thisDayMidNight = Calendar.getInstance().apply {
             changeTimeToMidNight()
         }
-        val thisDayMills = thisDayMidNight.timeInMillis
         val (year, month, day) = thisDayMidNight.getYearMonthDay()
 
         val focusHistory = FocusHistory(
             0,
-            thisDayMills,
+            thisDayMidNight.timeInMillis,
             focusTimeMillsStart,
             focusTimeMillsStop,
             day, month, year
