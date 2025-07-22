@@ -33,9 +33,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
-import com.rafih.justfocus.formatDate
-import com.rafih.justfocus.formatMillsDurationToString
-import com.rafih.justfocus.getDayName
+import com.rafih.justfocus.domain.formatDate
+import com.rafih.justfocus.domain.formatMillsDurationToString
+import com.rafih.justfocus.domain.getDayName
 
 @Composable
 fun AppUsageStatsScreen(

@@ -8,7 +8,7 @@ import android.content.pm.PackageManager
 import com.rafih.justfocus.domain.model.AppUsageEvent
 import com.rafih.justfocus.domain.model.AppUsageGroup
 import com.rafih.justfocus.domain.repository.UserApplicationRepository
-import com.rafih.justfocus.setCalendarTime
+import com.rafih.justfocus.domain.setCalendarTime
 import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Singleton

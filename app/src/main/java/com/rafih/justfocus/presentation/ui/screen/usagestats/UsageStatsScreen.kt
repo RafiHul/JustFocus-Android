@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.toColorInt
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.rafih.justfocus.formatMillsDurationToString
-import com.rafih.justfocus.getDayName
+import com.rafih.justfocus.domain.formatMillsDurationToString
+import com.rafih.justfocus.domain.getDayName
 import com.rafih.justfocus.presentation.ui.screen.usagestats.components.CardItemApp
 
 @Composable

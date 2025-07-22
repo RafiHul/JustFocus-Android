@@ -13,7 +13,7 @@ import com.rafih.justfocus.domain.model.UiEvent
 import com.rafih.justfocus.domain.usecase.stopwatch.StopwatchUseCase
 import com.rafih.justfocus.domain.usecase.stopwatch.StartStopwatchUseCase
 import com.rafih.justfocus.domain.usecase.stopwatch.StopFocusModeUseCase
-import com.rafih.justfocus.handleUiEvent
+import com.rafih.justfocus.domain.handleUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow

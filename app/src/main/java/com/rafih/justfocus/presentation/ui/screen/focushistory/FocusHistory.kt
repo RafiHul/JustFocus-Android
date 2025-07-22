@@ -34,8 +34,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rafih.justfocus.data.model.FocusHistory
 import com.rafih.justfocus.domain.model.FocusHistoryData
-import com.rafih.justfocus.formatDate
-import com.rafih.justfocus.formatMillsDurationToString
+import com.rafih.justfocus.domain.formatDate
+import com.rafih.justfocus.domain.formatMillsDurationToString
 
 @Composable
 fun FocusHistory(
