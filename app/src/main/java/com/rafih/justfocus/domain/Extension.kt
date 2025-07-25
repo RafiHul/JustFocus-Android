@@ -57,6 +57,10 @@ fun Long.formatMillsDurationToString(): String {
     }
 }
 
+fun String.formatViewIdToPackageName(basePackageName: String): String {
+    return "$basePackageName:id/$this"
+}
+
 
 suspend fun RoomResult.handleUiEvent(uiEventState: MutableSharedFlow<UiEvent>, callBackSuccess: () -> Unit){
     when(this) {
