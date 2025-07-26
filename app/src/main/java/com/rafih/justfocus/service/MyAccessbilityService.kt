@@ -10,6 +10,7 @@ import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
 import com.rafih.justfocus.data.repository.BlockedAppRepositoryImpl
+import com.rafih.justfocus.data.repository.BlockedShortRepositoryImpl
 import com.rafih.justfocus.data.repository.DataStoreRepositoryImpl
 import com.rafih.justfocus.di.ServiceEntryPoint
 import com.rafih.justfocus.domain.formatViewIdToPackageName
@@ -21,6 +22,7 @@ import kotlinx.coroutines.launch
 class MyAccessbilityService: AccessibilityService() {
 
     private lateinit var blockedAppRepository: BlockedAppRepositoryImpl
+    private lateinit var blockedShortRepository: BlockedShortRepositoryImpl
     private lateinit var dataStoreRepository: DataStoreRepositoryImpl
     var isFocus = false
 
@@ -33,6 +35,7 @@ class MyAccessbilityService: AccessibilityService() {
         )
 
         blockedAppRepository = entryPoint.provideBlockedAppRepository()
+        blockedShortRepository = entryPoint.provideBlockedShortRepository()
         dataStoreRepository = entryPoint.provideDataStoreRepository()
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -67,28 +70,30 @@ class MyAccessbilityService: AccessibilityService() {
             //if still null
             if(rootNode == null) return
 
-            when(event.packageName){
-                INSTAGRAM_PACKAGE_NAME -> {
-                    for (i in INSTAGRAM_REELS_VIEWID_COMPONENT){
-                        val viewId = i.formatViewIdToPackageName(INSTAGRAM_PACKAGE_NAME) //eg. "com.instagram.android:id/comment_button"
-                        if(rootNode.findAccessibilityNodeInfosByViewId(viewId).isEmpty()) break
+            if(blockedShortRepository.isAppBlocked(event.packageName.toString())){
+                when(event.packageName){
+                    INSTAGRAM_PACKAGE_NAME -> {
+                        for (i in INSTAGRAM_REELS_VIEWID_COMPONENT){
+                            val viewId = i.formatViewIdToPackageName(INSTAGRAM_PACKAGE_NAME) //eg. "com.instagram.android:id/comment_button"
+                            if(rootNode.findAccessibilityNodeInfosByViewId(viewId).isEmpty()) break
 
-                        appBackIntentWhenBlockedWithViewId(rootNode, INSTAGRAM_VIEWID_TARGET_WHEN_REELS_BLOCK)
+                            appBackIntentWhenBlockedWithViewId(rootNode, INSTAGRAM_VIEWID_TARGET_WHEN_REELS_BLOCK)
+                        }
                     }
-                }
 
-                WHATSAPP_PACKAGE_NAME -> {
-                    for (i in WHATSAPP_STORY_VIEWID_COMPONENT){
-                        val viewId = i.formatViewIdToPackageName(WHATSAPP_PACKAGE_NAME)
-                        if(rootNode.findAccessibilityNodeInfosByViewId(viewId).isEmpty()) break
+                    WHATSAPP_PACKAGE_NAME -> {
+                        for (i in WHATSAPP_STORY_VIEWID_COMPONENT){
+                            val viewId = i.formatViewIdToPackageName(WHATSAPP_PACKAGE_NAME)
+                            if(rootNode.findAccessibilityNodeInfosByViewId(viewId).isEmpty()) break
 
-                        appBackIntentWhenBlockedWithViewId(rootNode, WHATSAPP_VIEWID_TARGET_WHEN_STORY_BLOCK)
+                            appBackIntentWhenBlockedWithViewId(rootNode, WHATSAPP_VIEWID_TARGET_WHEN_STORY_BLOCK)
+                        }
                     }
-                }
-                YOUTUBE_PACKAGE_NAME -> {
-                    val viewId = YOUTUBE_SHORT_VIEWID_COMPONENT.formatViewIdToPackageName(YOUTUBE_PACKAGE_NAME)
-                    if(rootNode.findAccessibilityNodeInfosByViewId(viewId).isNotEmpty()) {
-                        appBackIntentWhenBlockedWithGlobalAction(GLOBAL_ACTION_BACK)
+                    YOUTUBE_PACKAGE_NAME -> {
+                        val viewId = YOUTUBE_SHORT_VIEWID_COMPONENT.formatViewIdToPackageName(YOUTUBE_PACKAGE_NAME)
+                        if(rootNode.findAccessibilityNodeInfosByViewId(viewId).isNotEmpty()) {
+                            appBackIntentWhenBlockedWithGlobalAction(GLOBAL_ACTION_BACK)
+                        }
                     }
                 }
             }
@@ -98,7 +103,6 @@ class MyAccessbilityService: AccessibilityService() {
     private fun readUIElements(node: AccessibilityNodeInfo?) {
         if (node == null) return
 
-        // Baca informasi dari node saat ini
         val text = node.text?.toString() ?: ""
         val contentDesc = node.contentDescription?.toString() ?: ""
         val className = node.className?.toString() ?: ""
@@ -120,7 +124,6 @@ class MyAccessbilityService: AccessibilityService() {
         """.trimIndent())
         }
 
-        // Rekursif untuk semua child nodes
         for (i in 0 until node.childCount) {
             val childNode = node.getChild(i)
             readUIElements(childNode)
@@ -154,7 +157,7 @@ class MyAccessbilityService: AccessibilityService() {
         intentToAndroidHome()
     }
 
-    private companion object {
+    companion object {
         const val THREAD_SLEEP_BEFORE_EXIT_APP = 1000L
         //PACKAGE NAME
         const val INSTAGRAM_PACKAGE_NAME = "com.instagram.android"

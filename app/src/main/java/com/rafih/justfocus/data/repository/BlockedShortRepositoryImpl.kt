@@ -10,12 +10,14 @@ import javax.inject.Singleton
 class BlockedShortRepositoryImpl @Inject constructor(private val dao: BlockedShortDao): BlockedShortRepository{
     override var chachedBlockedShortPackageName: List<String> = emptyList()
 
-    override suspend fun addBatchBlockedShort(blockedAppList: List<BlockedShort>) {
-        dao.addBatchBlockedShort(blockedAppList)
+    override suspend fun addBatchBlockedShort(blockedShortList: List<BlockedShort>) {
+        dao.addBatchBlockedShort(blockedShortList)
         loadBlockedShort()
     }
 
-    override suspend fun deleteAllBlockedShort() = dao.deleteAllBlockedShort()
+    override suspend fun deleteAllBlockedShort() {
+        dao.deleteAllBlockedShort()
+    }
 
     override suspend fun loadBlockedShort() {
         chachedBlockedShortPackageName = dao.getBlockedShort().map { it.packageName }

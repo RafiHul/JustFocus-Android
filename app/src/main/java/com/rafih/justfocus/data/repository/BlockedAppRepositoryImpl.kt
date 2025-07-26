@@ -22,6 +22,7 @@ class BlockedAppRepositoryImpl @Inject constructor(private val dao: BlockedAppDa
         loadBlockedApp()
     }
 
+    // TODO: ini gk di load pas delete ??
     override suspend fun deleteAllBlockedApp() = dao.deleteAllBlockedApp()
 
     override suspend fun loadBlockedApp(){
