@@ -77,6 +77,10 @@ class StopwatchRepositoryImpl @Inject constructor(
         serviceConnector?.pauseStopwatch()
     }
 
+    override fun resumeStopwatch() {
+        serviceConnector?.resumeStopwatch()
+    }
+
     override fun setStopwatchDuration(stopwatchDuration: StopwatchDuration) {
         serviceConnector?.setStopwatchDuration(stopwatchDuration)
     }

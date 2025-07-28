@@ -92,6 +92,13 @@ class StopwatchService: Service() {
             }
         }
 
+        override fun resumeStopwatch() {
+            if(!_stopwatchState.value.isRunning){
+                _stopwatchState.value = _stopwatchState.value.copy(isRunning = true)
+                handler.post(stopwatchRunnable)
+            }
+        }
+
         override fun stopStopwatch() {
             _stopwatchState.value = StopwatchState(isRunning = false)
             _stopwatchDuration.value = null

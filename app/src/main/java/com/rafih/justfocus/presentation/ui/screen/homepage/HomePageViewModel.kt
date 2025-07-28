@@ -30,7 +30,7 @@ class HomePageViewModel @Inject constructor(
     var switchState by mutableStateOf(false)
         private set
 
-    // TODO: Kalo accessbility nya mati dia tidak work
+    // TODO: Kalo accessbility nya mati dia tidak work & cek di db ketika apk keluar
     fun initSwitchState(){
         val blockedShort = blockedShortRepository.chachedBlockedShortPackageName
 

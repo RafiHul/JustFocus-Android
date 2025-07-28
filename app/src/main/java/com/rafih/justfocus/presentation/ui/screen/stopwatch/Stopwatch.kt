@@ -51,10 +51,24 @@ fun Stopwatch(
             Text("Stop Focus")
         }
 
-        Button(onClick = {
-            viewModel.pauseStopwatch()
-        }) {
-            Text("Pause Focus")
+        if(time.value.isRunning){
+
+            Button(onClick = {
+                viewModel.pauseStopwatch()
+            }) {
+                Text("Pause Focus")
+            }
+
+        } else {
+
+            Button(onClick = {
+                viewModel.resumeStopwatch()
+            }) {
+                Text("resume Focus")
+            }
+
         }
+
+
     }
 }

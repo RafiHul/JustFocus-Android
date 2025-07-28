@@ -8,6 +8,7 @@ interface StopwatchServiceConnector {
     fun startStopwatch()
     fun stopStopwatch()
     fun pauseStopwatch()
+    fun resumeStopwatch()
     fun setStopwatchDuration(stopwatchDuration: StopwatchDuration)
     fun getStopwatchState(): Flow<StopwatchState>
 }

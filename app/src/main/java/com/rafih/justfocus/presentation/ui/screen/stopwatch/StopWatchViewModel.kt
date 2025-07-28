@@ -87,4 +87,10 @@ class StopWatchViewModel @Inject constructor(
             stopwatchUseCase.pauseStopwatch()
         }
     }
+
+    fun resumeStopwatch(){
+        viewModelScope.launch {
+            stopwatchUseCase.resumeStopWatch()
+        }
+    }
 }

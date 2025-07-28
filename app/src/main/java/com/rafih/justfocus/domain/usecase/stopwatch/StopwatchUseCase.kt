@@ -19,6 +19,11 @@ class StopwatchUseCase @Inject constructor(
         stopWatchRepository.pauseStopwatch()
     }
 
+    suspend fun resumeStopWatch(){
+        dataStoreRepositoryImpl.setFocusModeStatus(true)
+        stopWatchRepository.resumeStopwatch()
+    }
+
     suspend fun setStopWatchDuration(stopWatchDuration: StopwatchDuration){
         stopWatchRepository.serviceConnected.first {it == true}
         stopWatchRepository.setStopwatchDuration(stopWatchDuration)
