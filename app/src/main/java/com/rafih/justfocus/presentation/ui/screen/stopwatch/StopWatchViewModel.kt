@@ -69,7 +69,10 @@ class StopWatchViewModel @Inject constructor(
 
     fun stopStopwatch(){
         viewModelScope.launch {
-            focusModeSessionDuration.stopMills = Calendar.getInstance().timeInMillis
+
+            //jadi ini agar akurat dia stop nya pas kapan bukan di lihat dari waktu saat ini, tapi di tambah dari waktu pada timer yang tampil
+            val stopTimeMills = focusModeSessionDuration.startMills + stopwatchState.value.toMillis()
+            focusModeSessionDuration.stopMills = stopTimeMills
 
             stopFocusModeUseCase.execute(focusModeSessionDuration).collectLatest {
                 it.handleUiEvent(_uiEvent){

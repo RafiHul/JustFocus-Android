@@ -5,4 +5,8 @@ data class StopwatchState(
     val seconds: Int = 0,
     val minutes: Int = 0,
     val hours: Int = 0
-)
+){
+    fun toMillis(): Long {
+        return (hours * 3600 + minutes * 60 + seconds) * 1000L
+    }
+}
