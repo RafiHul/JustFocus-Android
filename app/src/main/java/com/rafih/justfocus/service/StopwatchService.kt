@@ -47,7 +47,7 @@ class StopwatchService: Service() {
                     hours++
                 }
 
-                checkStopWatchDuration(minutes, hours)
+                checkStopWatchDuration(minutes, hours, seconds)
 
                 _stopwatchState.value = _stopwatchState.value.copy(seconds = seconds, minutes =  minutes, hours = hours)
                 handler.postDelayed(this, 1000)
@@ -142,10 +142,10 @@ class StopwatchService: Service() {
             .notify(NOTIFICATION_ID, createNotification())
     }
 
-    private fun checkStopWatchDuration(minutes: Int, hours: Int){
+    private fun checkStopWatchDuration(minutes: Int, hours: Int, second: Int){
         _stopwatchDuration.value?.let {
-            if(hours >= it.hour && minutes >= it.minute){
-                binder.pauseStopwatch()
+            if(hours >= it.hour && minutes >= it.minute && second >= it.second){
+                binder.pauseStopwatch()  // TODO: ini ada bug dia harus nya stop aja, kan ini pause dia tetap jalan di sistem
             }
         }
     }

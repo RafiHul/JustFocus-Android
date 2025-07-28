@@ -1,5 +1,6 @@
 package com.rafih.justfocus.presentation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -19,8 +20,8 @@ sealed class AppRoute(val route: String){
     object UsageStats: AppRoute("usage_stats_screen")
     object FocusMode: AppRoute("focus_mode_screen")
     object FocusHistory: AppRoute("focus_history_screen")
-    object StopWatch: AppRoute("stopwatch_screen/{hour}/{minute}"){
-        fun createRoute(hour: Int, minute: Int) = "stopwatch_screen/$hour/$minute"
+    object StopWatch: AppRoute("stopwatch_screen/{hour}/{minute}/{second}"){
+        fun createRoute(hour: Int, minute: Int, second: Int) = "stopwatch_screen/$hour/$minute/$second"
     }
     object AppUsageStats: AppRoute("app_usage_stats_screen/{appPackageName}"){
         fun createRoute(appPackageName: String) = "app_usage_stats_screen/$appPackageName"
@@ -57,9 +58,9 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
         }
 
         composable(AppRoute.FocusMode.route) {
-            FocusModeScreen(modifier){ hour, minute ->
+            FocusModeScreen(modifier){ hour, minute, second ->
 
-                val nav = AppRoute.StopWatch.createRoute(hour, minute)
+                val nav = AppRoute.StopWatch.createRoute(hour, minute, second)
                 navController.navigate(nav)
 
             }
@@ -77,14 +78,20 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
                 },
                 navArgument("minute"){
                     type = NavType.IntType
+                },
+                navArgument("second"){
+                    type = NavType.IntType
                 }
             )
         ) { backStackEntry ->
 
             val hour = backStackEntry.arguments?.getInt("hour") ?: 0
             val minute = backStackEntry.arguments?.getInt("minute") ?: 0
+            val second = backStackEntry.arguments?.getInt("second") ?: 0
 
-            Stopwatch(hour, minute, modifier) {
+            Log.d("cek second tumbal", second.toString()) //ini aneh dia harus di log agar tidak 0 dan sesuai value di dalam stopwatch ????
+
+            Stopwatch(hour, minute, second, modifier) {
                 navController.popBackStack()
             }
         }

@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.commandiron.wheel_picker_compose.WheelTimePicker
+import com.rafih.justfocus.presentation.ui.component.timepicker.MyWheelTimePicker
 import java.time.LocalTime
 
 @Composable
@@ -45,7 +45,7 @@ fun StopwatchDurationPickerDialog(
                     Text("Minute")
                 }
 
-                WheelTimePicker(startTime = LocalTime.MIDNIGHT){ snappedTime ->
+                MyWheelTimePicker(startTime = LocalTime.MIDNIGHT){ snappedTime ->
                     stopwatchDuration = snappedTime
                 }
 

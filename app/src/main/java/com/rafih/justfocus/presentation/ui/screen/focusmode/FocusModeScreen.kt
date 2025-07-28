@@ -1,6 +1,5 @@
 package com.rafih.justfocus.presentation.ui.screen.focusmode
 
-import android.app.TimePickerDialog
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
@@ -28,14 +27,12 @@ import com.rafih.justfocus.presentation.ui.screen.focusmode.component.CardItemAp
 import com.rafih.justfocus.presentation.ui.screen.focusmode.component.StopwatchDurationPickerDialog
 import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalTime
-import java.util.Calendar
-import java.util.Date
 
 @Composable
 fun FocusModeScreen(
     modifier: Modifier,
     focusModeViewModel: FocusModeViewModel = hiltViewModel(),
-    onNavigateToStopWatch: (Int, Int) -> Unit
+    onNavigateToStopWatch: (Int, Int, Int) -> Unit
 ) {
     val context = LocalContext.current
     val pm = context.packageManager
@@ -44,12 +41,7 @@ fun FocusModeScreen(
     val unselectedApps = focusModeViewModel.unselectedApps.collectAsState()
     val showStopWatchDurationPickerDialog = focusModeViewModel.showStopWatchDurationPickerDialog
 
-    var selectedFocusDate by remember { mutableStateOf<Date?>(null) }
     var stopwatchDuration by remember { mutableStateOf<LocalTime>(LocalTime.of(0, 0, 0)) }
-
-    val calendar = Calendar.getInstance()
-    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-    val minutes = calendar.get(Calendar.MINUTE)
 
     LaunchedEffect(Unit) {
         focusModeViewModel.uiEvent.collectLatest {
@@ -58,18 +50,6 @@ fun FocusModeScreen(
             }
         }
     }
-
-    val timePickerDialog = remember {
-        TimePickerDialog(context, {_, selectedHour, selectedMinute ->
-            calendar.set(Calendar.HOUR_OF_DAY, selectedHour)
-            calendar.set(Calendar.MINUTE, selectedMinute)
-            calendar.set(Calendar.SECOND, 0)
-            calendar.set(Calendar.MILLISECOND, 0)
-
-            selectedFocusDate = calendar.time
-        }, hour, minutes, true)
-    }
-
 
     LaunchedEffect(Unit) {
         focusModeViewModel.loadUserApps(pm)
@@ -81,7 +61,7 @@ fun FocusModeScreen(
 
                 Button(onClick = {
                     focusModeViewModel.beginToFocusMode {
-                        stopwatchDuration.let { onNavigateToStopWatch(it.hour, it.minute) }
+                        stopwatchDuration.let { onNavigateToStopWatch(it.hour, it.minute, it.second) }
                     }
                 }) {
                     Text("Focus")

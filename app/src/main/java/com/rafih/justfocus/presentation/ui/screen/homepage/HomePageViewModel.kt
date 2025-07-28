@@ -30,10 +30,13 @@ class HomePageViewModel @Inject constructor(
     var switchState by mutableStateOf(false)
         private set
 
-    // TODO: Not Work
+    // TODO: Kalo accessbility nya mati dia tidak work
     fun initSwitchState(){
-        if(blockedShortRepository.chachedBlockedShortPackageName.isNotEmpty()){
+        val blockedShort = blockedShortRepository.chachedBlockedShortPackageName
+
+        if(blockedShort.isNotEmpty()){
             switchState = true
+            selectedBlockedShort = blockedShort
         }
     }
 

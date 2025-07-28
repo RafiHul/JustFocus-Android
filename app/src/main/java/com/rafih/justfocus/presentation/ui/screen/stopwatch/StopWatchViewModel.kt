@@ -59,7 +59,7 @@ class StopWatchViewModel @Inject constructor(
 
     fun setStopWatchDuration(stopWatchDuration: StopwatchDuration){
         viewModelScope.launch {
-            if(stopWatchDuration.minute == 0 && stopWatchDuration.hour == 0){
+            if(stopWatchDuration.minute == 0 && stopWatchDuration.hour == 0 && stopWatchDuration.second == 0){
                 return@launch
             }
 

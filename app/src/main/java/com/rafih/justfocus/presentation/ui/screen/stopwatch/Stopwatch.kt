@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun Stopwatch(
-    hour: Int, minute: Int,
+    hour: Int, minute: Int, second: Int,
     modifier: Modifier,
     viewModel: StopWatchViewModel = hiltViewModel(),
     navigateBack: () -> Unit
@@ -30,7 +30,7 @@ fun Stopwatch(
 
     LaunchedEffect(Unit) {
         viewModel.loadStopwatchState()
-        viewModel.setStopWatchDuration(StopwatchDuration(hour, minute))
+        viewModel.setStopWatchDuration(StopwatchDuration(hour, minute, second))
         viewModel.startStopwatch()
 
         viewModel.uiEvent.collectLatest {

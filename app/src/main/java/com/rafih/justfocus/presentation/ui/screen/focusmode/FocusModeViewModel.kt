@@ -2,7 +2,6 @@ package com.rafih.justfocus.presentation.ui.screen.focusmode
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -91,7 +90,6 @@ class FocusModeViewModel @Inject constructor(
     }
 
     fun beginToFocusMode(callbackSuccess: () -> Unit) {
-        Log.d("cek isi", _selectedAppsPackages.value.toString())
         viewModelScope.launch {
             insertBatchBlockedAppUseCase.byPackageName(_selectedAppsPackages.value.toList())
                 .collect {
