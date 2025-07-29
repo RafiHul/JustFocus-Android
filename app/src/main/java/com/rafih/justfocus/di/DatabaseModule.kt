@@ -32,4 +32,7 @@ object DatabaseModule {
 
     @Provides
     fun provideFocusHistoryDao(db: AppDatabase) = db.focusHistoryDao()
+
+    @Provides
+    fun provideAppTimerDao(db: AppDatabase) = db.appTimerDao()
 }
