@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rafih.justfocus.domain.model.UiEvent
 import com.rafih.justfocus.presentation.ui.screen.focusmode.component.CardItemApp
+import com.rafih.justfocus.presentation.ui.screen.focusmode.component.DropDownActivity
 import com.rafih.justfocus.presentation.ui.screen.focusmode.component.StopwatchDurationPickerDialog
 import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalTime
@@ -32,7 +33,7 @@ import java.time.LocalTime
 fun FocusModeScreen(
     modifier: Modifier,
     focusModeViewModel: FocusModeViewModel = hiltViewModel(),
-    onNavigateToStopWatch: (Int, Int, Int) -> Unit
+    onNavigateToStopWatch: (Int, Int, Int, String) -> Unit
 ) {
     val context = LocalContext.current
     val pm = context.packageManager
@@ -40,6 +41,7 @@ fun FocusModeScreen(
     val selectedApps = focusModeViewModel.selectedApps.collectAsState()
     val unselectedApps = focusModeViewModel.unselectedApps.collectAsState()
     val showStopWatchDurationPickerDialog = focusModeViewModel.showStopWatchDurationPickerDialog
+    val activitySelected = focusModeViewModel.activitySelected
 
     var stopwatchDuration by remember { mutableStateOf<LocalTime>(LocalTime.of(0, 0, 0)) }
 
@@ -61,7 +63,7 @@ fun FocusModeScreen(
 
                 Button(onClick = {
                     focusModeViewModel.beginToFocusMode {
-                        stopwatchDuration.let { onNavigateToStopWatch(it.hour, it.minute, it.second) }
+                        stopwatchDuration.let { onNavigateToStopWatch(it.hour, it.minute, it.second, activitySelected) }
                     }
                 }) {
                     Text("Focus")
@@ -69,6 +71,10 @@ fun FocusModeScreen(
 
                 Button(onClick = { focusModeViewModel.showPickerDialog() }) {
                     Text("Pick Time")
+                }
+
+                DropDownActivity(activitySelected){
+                    focusModeViewModel.activitySelected = it
                 }
 
                 Text("Apps selected")

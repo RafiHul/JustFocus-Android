@@ -1,5 +1,6 @@
 package com.rafih.justfocus.presentation.ui.screen.stopwatch
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,7 +20,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun Stopwatch(
-    hour: Int, minute: Int, second: Int,
+    hour: Int, minute: Int, second: Int, activity: String,
     modifier: Modifier,
     viewModel: StopWatchViewModel = hiltViewModel(),
     navigateBack: () -> Unit
@@ -32,6 +33,7 @@ fun Stopwatch(
         viewModel.loadStopwatchState()
         viewModel.setStopWatchDuration(StopwatchDuration(hour, minute, second))
         viewModel.startStopwatch()
+        viewModel.stopwatchActivity = activity
 
         viewModel.uiEvent.collectLatest {
             when(it){

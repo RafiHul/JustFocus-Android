@@ -20,8 +20,8 @@ sealed class AppRoute(val route: String){
     object UsageStats: AppRoute("usage_stats_screen")
     object FocusMode: AppRoute("focus_mode_screen")
     object FocusHistory: AppRoute("focus_history_screen")
-    object StopWatch: AppRoute("stopwatch_screen/{hour}/{minute}/{second}"){
-        fun createRoute(hour: Int, minute: Int, second: Int) = "stopwatch_screen/$hour/$minute/$second"
+    object StopWatch: AppRoute("stopwatch_screen/{hour}/{minute}/{second}/{activity}"){
+        fun createRoute(hour: Int, minute: Int, second: Int, activity: String) = "stopwatch_screen/$hour/$minute/$second/$activity"
     }
     object AppUsageStats: AppRoute("app_usage_stats_screen/{appPackageName}"){
         fun createRoute(appPackageName: String) = "app_usage_stats_screen/$appPackageName"
@@ -58,9 +58,9 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
         }
 
         composable(AppRoute.FocusMode.route) {
-            FocusModeScreen(modifier){ hour, minute, second ->
+            FocusModeScreen(modifier){ hour, minute, second, activity ->
 
-                val nav = AppRoute.StopWatch.createRoute(hour, minute, second)
+                val nav = AppRoute.StopWatch.createRoute(hour, minute, second, activity)
                 navController.navigate(nav)
 
             }
@@ -81,6 +81,9 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
                 },
                 navArgument("second"){
                     type = NavType.IntType
+                },
+                navArgument("activity"){
+                    type = NavType.StringType
                 }
             )
         ) { backStackEntry ->
@@ -88,10 +91,11 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
             val hour = backStackEntry.arguments?.getInt("hour") ?: 0
             val minute = backStackEntry.arguments?.getInt("minute") ?: 0
             val second = backStackEntry.arguments?.getInt("second") ?: 0
+            val activity = backStackEntry.arguments?.getString("activity") ?: "Kerja"
 
             Log.d("cek second tumbal", second.toString()) //ini aneh dia harus di log agar tidak 0 dan sesuai value di dalam stopwatch ????
 
-            Stopwatch(hour, minute, second, modifier) {
+            Stopwatch(hour, minute, second, activity, modifier) {
                 navController.popBackStack()
             }
         }

@@ -17,7 +17,7 @@ class AddFocusHistoryUseCase @Inject constructor(
     private val focusHistoryRepository: FocusHistoryRepositoryImpl
 ) {
 
-    fun execute(focusTimeMillsStart: Long, focusTimeMillsStop: Long): Flow<RoomResult> = flow<RoomResult> {
+    fun execute(focusTimeMillsStart: Long, focusTimeMillsStop: Long, activity: String): Flow<RoomResult> = flow<RoomResult> {
         val thisDayMidNight = Calendar.getInstance().apply {
             changeTimeToMidNight()
         }
@@ -28,7 +28,7 @@ class AddFocusHistoryUseCase @Inject constructor(
             thisDayMidNight.timeInMillis,
             focusTimeMillsStart,
             focusTimeMillsStop,
-            day, month, year
+            day, month, year, activity
         )
 
         focusHistoryRepository.addFocusHistory(focusHistory)

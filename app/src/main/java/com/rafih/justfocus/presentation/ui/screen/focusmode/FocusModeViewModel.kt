@@ -36,6 +36,8 @@ class FocusModeViewModel @Inject constructor(
     var showStopWatchDurationPickerDialog by mutableStateOf(false)
         private set
 
+    var activitySelected by mutableStateOf("Kerja")
+
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent: SharedFlow<UiEvent> = _uiEvent
 

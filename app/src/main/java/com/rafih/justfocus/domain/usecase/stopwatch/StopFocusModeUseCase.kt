@@ -20,7 +20,7 @@ class StopFocusModeUseCase @Inject constructor(
     private val addFocusHistoryUseCase: AddFocusHistoryUseCase,
     private val deleteBlockedAppUseCase: DeleteBlockedAppUseCase
 ){
-    fun execute(focusModeSessionDuration: FocusModeSessionDuration): Flow<RoomResult> = flow {
+    fun execute(focusModeSessionDuration: FocusModeSessionDuration, activity: String): Flow<RoomResult> = flow {
         val result = deleteBlockedAppUseCase.all().first()
 
         if(result is RoomResult.Failed){
@@ -31,7 +31,7 @@ class StopFocusModeUseCase @Inject constructor(
         //insert focus mode history session
         val start = focusModeSessionDuration.startMills
         val stop = focusModeSessionDuration.stopMills
-        val res = addFocusHistoryUseCase.execute(start, stop).first()
+        val res = addFocusHistoryUseCase.execute(start, stop, activity).first()
 
         if(res is RoomResult.Failed){
             emit(RoomResult.Failed(res.message))

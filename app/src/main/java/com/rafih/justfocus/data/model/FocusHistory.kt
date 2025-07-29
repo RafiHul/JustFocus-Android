@@ -11,5 +11,6 @@ data class FocusHistory(
     val focusTimeMillsStop: Long,
     val day: Int,
     val month: Int,
-    val year: Int
+    val year: Int,
+    val activity: String
 )

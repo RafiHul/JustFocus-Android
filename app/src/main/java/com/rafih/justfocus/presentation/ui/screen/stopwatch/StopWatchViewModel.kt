@@ -34,6 +34,8 @@ class StopWatchViewModel @Inject constructor(
     private val _stopwatchState = MutableStateFlow(StopwatchState(isRunning = false))
     val stopwatchState: StateFlow<StopwatchState> = _stopwatchState
 
+    var stopwatchActivity by mutableStateOf("")
+
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent: SharedFlow<UiEvent> = _uiEvent
 
@@ -74,7 +76,7 @@ class StopWatchViewModel @Inject constructor(
             val stopTimeMills = focusModeSessionDuration.startMills + stopwatchState.value.toMillis()
             focusModeSessionDuration.stopMills = stopTimeMills
 
-            stopFocusModeUseCase.execute(focusModeSessionDuration).collectLatest {
+            stopFocusModeUseCase.execute(focusModeSessionDuration, stopwatchActivity).collectLatest {
                 it.handleUiEvent(_uiEvent){
                     _stopwatchState.value = StopwatchState(isRunning = false)
                 }

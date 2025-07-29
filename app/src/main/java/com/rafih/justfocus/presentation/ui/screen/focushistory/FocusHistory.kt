@@ -48,7 +48,7 @@ fun FocusHistory(
         viewModel.fetchFocusHistoryData()
     }
 
-    LazyColumn() {
+    LazyColumn(modifier) {
         items(focusHistoryData.value){
             FocusHistoryItemParent(it)
         }
@@ -104,7 +104,7 @@ fun FocusHistoryItemChild(data: FocusHistory) {
         , colors = CardDefaults.cardColors(Color.White)
     ) {
         Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Kegiatan", fontSize = 16.sp)
+            Text(data.activity, fontSize = 16.sp)
             Text(totalMills.formatMillsDurationToString(), fontSize = 20.sp)
         }
     }
