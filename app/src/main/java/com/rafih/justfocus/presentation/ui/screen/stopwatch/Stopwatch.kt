@@ -14,13 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.rafih.justfocus.domain.millisToLocalTime
 import com.rafih.justfocus.domain.model.StopwatchDuration
 import com.rafih.justfocus.domain.model.UiEvent
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun Stopwatch(
-    hour: Int, minute: Int, second: Int, activity: String,
+    millis: Long,
+    activity: String,
     modifier: Modifier,
     viewModel: StopWatchViewModel = hiltViewModel(),
     navigateBack: () -> Unit
@@ -31,7 +33,10 @@ fun Stopwatch(
 
     LaunchedEffect(Unit) {
         viewModel.loadStopwatchState()
-        viewModel.setStopWatchDuration(StopwatchDuration(hour, minute, second))
+        val localTime = millis.millisToLocalTime()
+        val duration = localTime.let { StopwatchDuration(it.hour, it.minute, it.second) }
+
+        viewModel.setStopWatchDuration(duration)
         viewModel.startStopwatch()
         viewModel.stopwatchActivity = activity
 

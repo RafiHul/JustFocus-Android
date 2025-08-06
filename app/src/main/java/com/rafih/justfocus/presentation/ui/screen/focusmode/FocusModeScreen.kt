@@ -27,13 +27,12 @@ import com.rafih.justfocus.presentation.ui.screen.focusmode.component.CardItemAp
 import com.rafih.justfocus.presentation.ui.screen.focusmode.component.DropDownActivity
 import com.rafih.justfocus.presentation.ui.screen.focusmode.component.TimePickerDialog
 import kotlinx.coroutines.flow.collectLatest
-import java.time.LocalTime
 
 @Composable
 fun FocusModeScreen(
     modifier: Modifier,
     focusModeViewModel: FocusModeViewModel = hiltViewModel(),
-    onNavigateToStopWatch: (Int, Int, Int, String) -> Unit
+    onNavigateToStopWatch: (Long, String) -> Unit
 ) {
     val context = LocalContext.current
     val pm = context.packageManager
@@ -43,7 +42,7 @@ fun FocusModeScreen(
     val showStopWatchDurationPickerDialog = focusModeViewModel.showStopWatchDurationPickerDialog
     val activitySelected = focusModeViewModel.activitySelected
 
-    var stopwatchDuration by remember { mutableStateOf<LocalTime>(LocalTime.of(0, 0, 0)) }
+    var stopwatchDuration by remember { mutableStateOf(0L) }
 
     LaunchedEffect(Unit) {
         focusModeViewModel.uiEvent.collectLatest {
@@ -63,7 +62,7 @@ fun FocusModeScreen(
 
                 Button(onClick = {
                     focusModeViewModel.beginToFocusMode {
-                        stopwatchDuration.let { onNavigateToStopWatch(it.hour, it.minute, it.second, activitySelected) }
+                        stopwatchDuration.let { onNavigateToStopWatch(it, activitySelected) }
                     }
                 }) {
                     Text("Focus")

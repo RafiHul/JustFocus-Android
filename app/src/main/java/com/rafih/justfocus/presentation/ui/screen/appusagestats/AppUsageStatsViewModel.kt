@@ -1,9 +1,7 @@
 package com.rafih.justfocus.presentation.ui.screen.appusagestats
 
 import android.icu.util.Calendar
-import android.util.Log
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -12,7 +10,6 @@ import com.rafih.justfocus.data.model.AppUsageLimit
 import com.rafih.justfocus.domain.handleUiEvent
 import com.rafih.justfocus.domain.model.AppUsageGroup
 import com.rafih.justfocus.domain.model.UiEvent
-import com.rafih.justfocus.domain.timeToMills
 import com.rafih.justfocus.domain.usecase.AppUsageLimitUseCase
 import com.rafih.justfocus.domain.usecase.UsageStatsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +18,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -75,10 +71,9 @@ class AppUsageStatsViewModel @Inject constructor(
         }
     }
 
-    fun beginTimerApp(time: LocalTime, packageName: String){
+    fun beginTimerApp(timeMilis: Long, packageName: String){
         viewModelScope.launch {
-            val appUsageLimit = AppUsageLimit(packageName, time.timeToMills())
-            Log.d("cek bug timer limit 0", appUsageLimit.toString())
+            val appUsageLimit = AppUsageLimit(packageName, timeMilis)
             appUsageLimitUseCase.add(appUsageLimit).collect {
                 it.handleUiEvent(_uiEvent){}
             }

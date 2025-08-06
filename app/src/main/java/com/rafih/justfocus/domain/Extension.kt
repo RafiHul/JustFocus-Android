@@ -62,8 +62,16 @@ fun String.formatViewIdToPackageName(basePackageName: String): String {
     return "$basePackageName:id/$this"
 }
 
-fun LocalTime.timeToMills(): Long {
+fun LocalTime.timeToMilis(): Long {
     return (this.hour * 3600 + this.minute * 60 + this.second) * 1000L
+}
+
+fun Long.millisToLocalTime(): LocalTime {
+    val totalSeconds = this/ 1000
+    val hours = (totalSeconds / 3600).toInt()
+    val minutes = ((totalSeconds % 3600) / 60).toInt()
+    val seconds = (totalSeconds % 60).toInt()
+    return LocalTime.of(hours, minutes, seconds)
 }
 
 

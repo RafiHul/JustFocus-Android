@@ -48,7 +48,6 @@ class AppUsageLimitRepositoryImpl @Inject constructor(
         cachedAppHasUsageLimit = dao.get().toSet()
     }
 
-    // TODO: masih ada bug ketika add timer dia jadi 0, alias tidak tepat, mungkin dari navigasi nya
     override fun isAppHasUsageLimit(
         packageName: String,
         callBackBlocked: () -> Unit,

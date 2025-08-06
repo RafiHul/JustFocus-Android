@@ -18,16 +18,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.rafih.justfocus.domain.timeToMilis
 import com.rafih.justfocus.presentation.ui.component.timepicker.MyWheelTimePicker
 import java.time.LocalTime
 
 @Composable
 fun TimePickerDialog(
     onDismissRequest: () -> Unit,
-    onConfirmRequest: (LocalTime) -> Unit
+    onConfirmRequest: (Long) -> Unit
 ) {
 
-    var stopwatchDuration by remember { mutableStateOf<LocalTime>(LocalTime.of(0, 0, 0)) }
+    var stopwatchDuration by remember { mutableStateOf(0L) }
 
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
@@ -37,17 +38,19 @@ fun TimePickerDialog(
             shape = RoundedCornerShape(16.dp),
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize()) {
-                Row() {
+                Row {
                     Text("Hour")
                     Text("Minute")
                 }
 
                 MyWheelTimePicker(startTime = LocalTime.MIDNIGHT){ snappedTime ->
-                    stopwatchDuration = snappedTime
+                    stopwatchDuration = snappedTime.timeToMilis()
                 }
 
                 Button(onClick = {
-                    onConfirmRequest(stopwatchDuration)
+                    if(stopwatchDuration != 0L){
+                        onConfirmRequest(stopwatchDuration)
+                    }
                 }) {
                     Text("Confirm")
                 }
