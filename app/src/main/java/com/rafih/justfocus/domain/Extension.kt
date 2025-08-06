@@ -4,6 +4,7 @@ import com.rafih.justfocus.domain.model.UiEvent
 import com.rafih.justfocus.domain.model.handle.RoomResult
 import kotlinx.coroutines.flow.MutableSharedFlow
 import java.text.SimpleDateFormat
+import java.time.LocalTime
 import java.util.Calendar
 import java.util.Locale
 
@@ -59,6 +60,10 @@ fun Long.formatMillsDurationToString(): String {
 
 fun String.formatViewIdToPackageName(basePackageName: String): String {
     return "$basePackageName:id/$this"
+}
+
+fun LocalTime.timeToMills(): Long {
+    return (this.hour * 3600 + this.minute * 60 + this.second) * 1000L
 }
 
 

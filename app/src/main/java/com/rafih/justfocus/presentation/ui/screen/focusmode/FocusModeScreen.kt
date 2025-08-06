@@ -25,7 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.rafih.justfocus.domain.model.UiEvent
 import com.rafih.justfocus.presentation.ui.screen.focusmode.component.CardItemApp
 import com.rafih.justfocus.presentation.ui.screen.focusmode.component.DropDownActivity
-import com.rafih.justfocus.presentation.ui.screen.focusmode.component.StopwatchDurationPickerDialog
+import com.rafih.justfocus.presentation.ui.screen.focusmode.component.TimePickerDialog
 import kotlinx.coroutines.flow.collectLatest
 import java.time.LocalTime
 
@@ -106,7 +106,7 @@ fun FocusModeScreen(
     }
 
     if (showStopWatchDurationPickerDialog){
-        StopwatchDurationPickerDialog(
+        TimePickerDialog(
             onDismissRequest = { focusModeViewModel.closePickerDialog() },
             onConfirmRequest = { time ->
                 stopwatchDuration = time

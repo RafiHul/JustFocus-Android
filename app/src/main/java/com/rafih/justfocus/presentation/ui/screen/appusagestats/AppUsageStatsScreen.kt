@@ -36,6 +36,8 @@ import coil3.compose.AsyncImage
 import com.rafih.justfocus.domain.formatDate
 import com.rafih.justfocus.domain.formatMillsDurationToString
 import com.rafih.justfocus.domain.getDayName
+import com.rafih.justfocus.presentation.ui.screen.focusmode.component.TimePickerDialog
+import java.time.LocalTime
 
 @Composable
 fun AppUsageStatsScreen(
@@ -47,10 +49,16 @@ fun AppUsageStatsScreen(
     val pm = context.packageManager
 
     val dateSelected = viewModel.dateSelected.collectAsState()
+    val showTimePickerDialog = viewModel.showTimePickerDialog
+    val appUsage = viewModel.appUsage
 
 
     LaunchedEffect(Unit) {
         viewModel.loadAppUsageStats(appPackageName)
+    }
+
+    LaunchedEffect(dateSelected) {
+        viewModel.loadAppUsage(appPackageName)
     }
 
     Column(modifier.padding(horizontal = 16.dp)) {
@@ -123,11 +131,59 @@ fun AppUsageStatsScreen(
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
+
+                    Text(
+                        appUsage.toString(),
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+
+                    Card(
+                        colors = CardDefaults.cardColors(Color("#F0F2F5".toColorInt())),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable{ viewModel.showPickerDialog() }
+                    ) {
+
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.padding(10.dp)
+                        ) {
+                            Text("Set Focus Time", fontSize = 16.sp, color = Color.Black)
+                        }
+                    }
+
+                    if (appUsage != null){
+                        Card(
+                            colors = CardDefaults.cardColors(Color("#F0F2F5".toColorInt())),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable{ viewModel.deleteAppUsage(appPackageName) }
+                        ) {
+
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.padding(10.dp)
+                            ) {
+                                Text("Stop Timer", fontSize = 16.sp, color = Color.Black)
+                            }
+                        }
+                    }
                 }
-
-
             }
         }
+    }
 
+    if (showTimePickerDialog){
+        TimePickerDialog(
+            onDismissRequest = { viewModel.closePickerDialog() },
+            onConfirmRequest = {
+                viewModel.beginTimerApp(it, appPackageName)
+                viewModel.closePickerDialog()
+            }
+        )
     }
 }
