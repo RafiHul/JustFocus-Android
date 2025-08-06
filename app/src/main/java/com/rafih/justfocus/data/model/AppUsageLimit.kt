@@ -4,9 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 
-@Entity(tableName = "app_timer")
-data class AppTimer (
+@Entity(tableName = "app_usage_limit")
+data class AppUsageLimit (
     @PrimaryKey
     val packageName: String,
-    val blockUntilMills: Long
+    val limitMillis: Long,
+    val usageMillis: Long = 0L
 )

@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
+import com.rafih.justfocus.data.repository.AppUsageLimitRepositoryImpl
 import com.rafih.justfocus.data.repository.BlockedAppRepositoryImpl
 import com.rafih.justfocus.data.repository.BlockedShortRepositoryImpl
 import com.rafih.justfocus.data.repository.DataStoreRepositoryImpl
@@ -24,6 +25,7 @@ class MyAccessbilityService: AccessibilityService() {
     private lateinit var blockedAppRepository: BlockedAppRepositoryImpl
     private lateinit var blockedShortRepository: BlockedShortRepositoryImpl
     private lateinit var dataStoreRepository: DataStoreRepositoryImpl
+    private lateinit var appUsageLimitRepository: AppUsageLimitRepositoryImpl
     var isFocus = false
 
     override fun onServiceConnected() {
@@ -37,30 +39,47 @@ class MyAccessbilityService: AccessibilityService() {
         blockedAppRepository = entryPoint.provideBlockedAppRepository()
         blockedShortRepository = entryPoint.provideBlockedShortRepository()
         dataStoreRepository = entryPoint.provideDataStoreRepository()
+        appUsageLimitRepository = entryPoint.provideAppTimerRepository()
 
         CoroutineScope(Dispatchers.IO).launch {
             dataStoreRepository.focusModeStatus.collect {
                 isFocus = it
             }
             blockedAppRepository.loadBlockedApp()
+            appUsageLimitRepository.load()
         }
 
     }
 
+    // TODO: bikin validasi, kalo aplikasinya udh di block, dia tidak bisa di tambahkan timer
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
+        val packageName = event.packageName?.toString() ?: return
 
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED){
-            val packageName = event.packageName?.toString() ?: return
             if(::blockedAppRepository.isInitialized && blockedAppRepository.isAppBlocked(packageName) && isFocus){
                 intentToAndroidHome()
                 Handler(Looper.getMainLooper()).post {
                     Toast.makeText(applicationContext, "Blokir $packageName", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            appUsageLimitRepository.isAppHasUsageLimit(packageName, {
+                intentToAndroidHome()
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(applicationContext, "Penggunaan aplikasi telah melebihi batas $packageName", Toast.LENGTH_SHORT).show()
+                }
+            }, isFromContentChanged = false)
         }
 
         if (event.eventType == AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED){
+            appUsageLimitRepository.isAppHasUsageLimit(packageName, {
+                intentToAndroidHome()
+                Handler(Looper.getMainLooper()).post {
+                    Toast.makeText(applicationContext, "Penggunaan aplikasi telah melebihi batas $packageName", Toast.LENGTH_SHORT).show()
+                }
+            }, isFromContentChanged = true)
+
             val rootNode: AccessibilityNodeInfo? = rootInActiveWindow
 
             if(rootNode == null){
