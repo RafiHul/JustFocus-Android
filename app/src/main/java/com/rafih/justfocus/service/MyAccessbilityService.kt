@@ -51,7 +51,6 @@ class MyAccessbilityService: AccessibilityService() {
 
     }
 
-    // TODO: bikin validasi, kalo aplikasinya udh di block, dia tidak bisa di tambahkan timer
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
         val packageName = event.packageName?.toString() ?: return

@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rafih.justfocus.data.model.AppUsageLimit
+import com.rafih.justfocus.data.repository.BlockedAppRepositoryImpl
 import com.rafih.justfocus.domain.handleUiEvent
 import com.rafih.justfocus.domain.model.AppUsageGroup
 import com.rafih.justfocus.domain.model.UiEvent
@@ -23,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AppUsageStatsViewModel @Inject constructor(
     private val usageStatsUSeCase: UsageStatsUseCase,
-    private val appUsageLimitUseCase: AppUsageLimitUseCase
+    private val appUsageLimitUseCase: AppUsageLimitUseCase,
+    private val blockedAppRepository: BlockedAppRepositoryImpl
 ): ViewModel() {
 
     var appUsageStatsState by mutableStateOf<AppUsageStatsState>(AppUsageStatsState.Loading)
@@ -81,8 +83,10 @@ class AppUsageStatsViewModel @Inject constructor(
 
     }
 
-    fun showPickerDialog(){
-        showTimePickerDialog = true
+    fun showPickerDialog(packageName: String){
+        if(!blockedAppRepository.chachedBlockedAppPackageName.contains(packageName)){
+            showTimePickerDialog = true
+        }
     }
 
     fun closePickerDialog(){

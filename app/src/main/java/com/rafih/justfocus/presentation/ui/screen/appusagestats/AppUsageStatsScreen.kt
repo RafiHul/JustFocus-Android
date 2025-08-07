@@ -144,7 +144,7 @@ fun AppUsageStatsScreen(
                         shape = RoundedCornerShape(12.dp),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable{ viewModel.showPickerDialog() }
+                            .clickable{ viewModel.showPickerDialog(appPackageName) }
                     ) {
 
                         Row(
