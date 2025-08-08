@@ -1,7 +1,7 @@
 package com.rafih.justfocus.presentation.ui.screen.stopwatch
 
-import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.rafih.justfocus.domain.millisToLocalTime
-import com.rafih.justfocus.domain.model.StopwatchDuration
+import com.rafih.justfocus.domain.model.StopWatchDuration
 import com.rafih.justfocus.domain.model.UiEvent
 import kotlinx.coroutines.flow.collectLatest
 
@@ -25,7 +25,8 @@ fun Stopwatch(
     activity: String,
     modifier: Modifier,
     viewModel: StopWatchViewModel = hiltViewModel(),
-    navigateBack: () -> Unit
+    navigateToFocuMode: () -> Unit,
+    navigateToHomePage: () -> Unit
 ) {
 
     val time = viewModel.stopwatchState.collectAsState()
@@ -34,11 +35,10 @@ fun Stopwatch(
     LaunchedEffect(Unit) {
         viewModel.loadStopwatchState()
         val localTime = millis.millisToLocalTime()
-        val duration = localTime.let { StopwatchDuration(it.hour, it.minute, it.second) }
+        val duration = localTime.let { StopWatchDuration(it.hour, it.minute, it.second) }
 
         viewModel.setStopWatchDuration(duration)
-        viewModel.startStopwatch()
-        viewModel.stopwatchActivity = activity
+        viewModel.startStopwatch(activity)
 
         viewModel.uiEvent.collectLatest {
             when(it){
@@ -53,7 +53,7 @@ fun Stopwatch(
 
         Button(onClick = {
             viewModel.stopStopwatch()
-            navigateBack()
+            navigateToFocuMode()
         }) {
             Text("Stop Focus")
         }
@@ -75,7 +75,7 @@ fun Stopwatch(
             }
 
         }
-
-
     }
+
+    BackHandler(onBack = navigateToHomePage)
 }

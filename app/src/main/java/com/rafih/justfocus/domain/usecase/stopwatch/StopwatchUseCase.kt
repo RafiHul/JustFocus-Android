@@ -2,7 +2,7 @@ package com.rafih.justfocus.domain.usecase.stopwatch
 
 import com.rafih.justfocus.data.repository.DataStoreRepositoryImpl
 import com.rafih.justfocus.data.repository.StopwatchRepositoryImpl
-import com.rafih.justfocus.domain.model.StopwatchDuration
+import com.rafih.justfocus.domain.model.StopWatchDuration
 import com.rafih.justfocus.domain.model.StopwatchState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -24,7 +24,7 @@ class StopwatchUseCase @Inject constructor(
         stopWatchRepository.resumeStopwatch()
     }
 
-    suspend fun setStopWatchDuration(stopWatchDuration: StopwatchDuration){
+    suspend fun setStopWatchDuration(stopWatchDuration: StopWatchDuration){
         stopWatchRepository.serviceConnected.first {it == true}
         stopWatchRepository.setStopwatchDuration(stopWatchDuration)
     }

@@ -27,6 +27,7 @@ fun HomePageScreen(
     onNavigateToUsageStatsScreen: () -> Unit,
     onNavigateToFocusMode: () -> Unit,
     onNavigateToFocusHistory: () -> Unit,
+    onNavigateToStopWatch: () -> Unit,
     viewModel: HomePageViewModel = hiltViewModel()
 ){
 
@@ -37,7 +38,7 @@ fun HomePageScreen(
     }
 
     Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = modifier.fillMaxSize()) {
-        Button(onClick = onNavigateToFocusMode) {
+        Button(onClick = { viewModel.toggleFocusModeMenu(onNavigateToFocusMode, onNavigateToStopWatch) }) {
             Text("Focuss Mode")
         }
         Button(onClick = onNavigateToUsageStatsScreen) {

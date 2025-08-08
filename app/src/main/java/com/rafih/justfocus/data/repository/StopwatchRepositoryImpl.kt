@@ -7,7 +7,7 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import com.rafih.justfocus.service.StopwatchService
 import com.rafih.justfocus.domain.connector.StopwatchServiceConnector
-import com.rafih.justfocus.domain.model.StopwatchDuration
+import com.rafih.justfocus.domain.model.StopWatchDuration
 import com.rafih.justfocus.domain.model.StopwatchState
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -81,8 +81,8 @@ class StopwatchRepositoryImpl @Inject constructor(
         serviceConnector?.resumeStopwatch()
     }
 
-    override fun setStopwatchDuration(stopwatchDuration: StopwatchDuration) {
-        serviceConnector?.setStopwatchDuration(stopwatchDuration)
+    override fun setStopwatchDuration(stopWatchDuration: StopWatchDuration) {
+        serviceConnector?.setStopwatchDuration(stopWatchDuration)
     }
 
     override fun getStopwatchState(): Flow<StopwatchState> {

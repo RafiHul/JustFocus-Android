@@ -5,6 +5,7 @@ import com.rafih.justfocus.data.repository.FocusHistoryRepositoryImpl
 import com.rafih.justfocus.domain.model.handle.RoomResult
 import com.rafih.justfocus.domain.changeTimeToMidNight
 import com.rafih.justfocus.domain.getYearMonthDay
+import com.rafih.justfocus.domain.model.FocusModeSessionInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -17,7 +18,7 @@ class AddFocusHistoryUseCase @Inject constructor(
     private val focusHistoryRepository: FocusHistoryRepositoryImpl
 ) {
 
-    fun execute(focusTimeMillsStart: Long, focusTimeMillsStop: Long, activity: String): Flow<RoomResult> = flow<RoomResult> {
+    fun execute(focusModeSessionInfo: FocusModeSessionInfo): Flow<RoomResult> = flow<RoomResult> {
         val thisDayMidNight = Calendar.getInstance().apply {
             changeTimeToMidNight()
         }
@@ -26,9 +27,10 @@ class AddFocusHistoryUseCase @Inject constructor(
         val focusHistory = FocusHistory(
             0,
             thisDayMidNight.timeInMillis,
-            focusTimeMillsStart,
-            focusTimeMillsStop,
-            day, month, year, activity
+            focusModeSessionInfo.startMills,
+            focusModeSessionInfo.stopMills,
+            day, month, year,
+            focusModeSessionInfo.activity
         )
 
         focusHistoryRepository.addFocusHistory(focusHistory)

@@ -46,6 +46,10 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
                 },
                 onNavigateToFocusHistory = {
                     navController.navigate(AppRoute.FocusHistory.route)
+                },
+                onNavigateToStopWatch = {
+                    val nav = AppRoute.StopWatch.createRoute(0L, "hthth")
+                    navController.navigate(nav)
                 }
             )
         }
@@ -83,9 +87,11 @@ fun AppNavGraph(navController: NavHostController, modifier: Modifier = Modifier)
 
             Log.d("cek second tumbal", millis.toString()) //ini aneh dia harus di log agar tidak 0 dan sesuai value di dalam stopwatch ????
 
-            Stopwatch(millis, activity, modifier) {
+            Stopwatch(millis, activity, modifier, navigateToFocuMode = {
                 navController.popBackStack()
-            }
+            }, navigateToHomePage = {
+                navController.navigate(AppRoute.Home.route)
+            })
         }
 
         composable(

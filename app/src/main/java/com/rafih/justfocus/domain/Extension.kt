@@ -67,7 +67,7 @@ fun LocalTime.timeToMilis(): Long {
 }
 
 fun Long.millisToLocalTime(): LocalTime {
-    val totalSeconds = this/ 1000
+    val totalSeconds = this / 1000
     val hours = (totalSeconds / 3600).toInt()
     val minutes = ((totalSeconds % 3600) / 60).toInt()
     val seconds = (totalSeconds % 60).toInt()

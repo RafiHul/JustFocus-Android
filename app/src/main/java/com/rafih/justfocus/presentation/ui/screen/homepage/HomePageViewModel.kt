@@ -8,14 +8,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.rafih.justfocus.data.model.BlockedShort
 import com.rafih.justfocus.data.repository.BlockedShortRepositoryImpl
+import com.rafih.justfocus.data.repository.DataStoreRepositoryImpl
 import com.rafih.justfocus.service.MyAccessbilityService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
-    private val blockedShortRepository: BlockedShortRepositoryImpl
+    private val blockedShortRepository: BlockedShortRepositoryImpl,
+    private val dataStoreRepository: DataStoreRepositoryImpl
 ): ViewModel() {
 
     val blockedShortItem = listOf(
@@ -46,11 +49,9 @@ class HomePageViewModel @Inject constructor(
             if(switchState){
                 blockedShortRepository.deleteAllBlockedShort()
                 blockedShortRepository.addBatchBlockedShort(selectedBlockedShort.map { BlockedShort(it) })
-                Log.d("cek", "sucess block app")
             } else {
                 blockedShortRepository.deleteAllBlockedShort()
                 blockedShortRepository.loadBlockedShort()
-                Log.d("cek", "sucess delete")
             }
         }
     }
@@ -65,6 +66,17 @@ class HomePageViewModel @Inject constructor(
         if(switchState){ //jika false jangan di eksekusi
             //matikan ketika memilih yang baru
             switchStateChange(false)
+        }
+    }
+
+    fun toggleFocusModeMenu(
+        navigateToFocusMode: () -> Unit,
+        navigateToStopWatch: () -> Unit
+    ){
+        viewModelScope.launch {
+            dataStoreRepository.focusModeStatus.collectLatest {
+                if (it) navigateToStopWatch() else navigateToFocusMode()
+            }
         }
     }
 }

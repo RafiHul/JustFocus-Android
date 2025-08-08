@@ -85,7 +85,6 @@ fun FocusModeScreen(
                         }
                     }
                 }
-
                 Text("Select more apps")
                 LazyColumn(state = rememberLazyListState(), modifier = Modifier.animateContentSize()) {
                     items(items = unselectedApps.value, key = { it.packageName }) { app ->

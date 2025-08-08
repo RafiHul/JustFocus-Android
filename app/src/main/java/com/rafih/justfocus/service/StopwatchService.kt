@@ -14,7 +14,7 @@ import androidx.core.app.NotificationCompat
 import com.rafih.justfocus.MainActivity
 import com.rafih.justfocus.R
 import com.rafih.justfocus.domain.connector.StopwatchServiceConnector
-import com.rafih.justfocus.domain.model.StopwatchDuration
+import com.rafih.justfocus.domain.model.StopWatchDuration
 import com.rafih.justfocus.domain.model.StopwatchState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +27,7 @@ class StopwatchService: Service() {
     private val _stopwatchState = MutableStateFlow(StopwatchState(isRunning = false))
     val stopwatchState: Flow<StopwatchState> = _stopwatchState
 
-    private val _stopwatchDuration = MutableStateFlow<StopwatchDuration?>(null)
+    private val _stopWatchDuration = MutableStateFlow<StopWatchDuration?>(null)
 
     private var stopwatchRunnable = object : Runnable {
         override fun run() {
@@ -101,13 +101,13 @@ class StopwatchService: Service() {
 
         override fun stopStopwatch() {
             _stopwatchState.value = StopwatchState(isRunning = false)
-            _stopwatchDuration.value = null
+            _stopWatchDuration.value = null
             handler.removeCallbacks(stopwatchRunnable)
             updateNotification()
         }
 
-        override fun setStopwatchDuration(stopwatchDuration: StopwatchDuration) {
-            _stopwatchDuration.value = stopwatchDuration
+        override fun setStopwatchDuration(stopWatchDuration: StopWatchDuration) {
+            _stopWatchDuration.value = stopWatchDuration
         }
 
         override fun getStopwatchState() = stopwatchState
@@ -150,9 +150,9 @@ class StopwatchService: Service() {
     }
 
     private fun checkStopWatchDuration(minutes: Int, hours: Int, second: Int){
-        _stopwatchDuration.value?.let {
+        _stopWatchDuration.value?.let {
             if(hours >= it.hour && minutes >= it.minute && second >= it.second){
-                binder.pauseStopwatch()  // TODO: ini ada bug dia harus nya stop aja, kan ini pause dia tetap jalan di sistem
+                binder.pauseStopwatch()
             }
         }
     }

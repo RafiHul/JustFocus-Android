@@ -1,13 +1,8 @@
 package com.rafih.justfocus.presentation.ui.screen.stopwatch
 
-import android.icu.util.Calendar
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rafih.justfocus.domain.model.FocusModeSessionDuration
-import com.rafih.justfocus.domain.model.StopwatchDuration
+import com.rafih.justfocus.domain.model.StopWatchDuration
 import com.rafih.justfocus.domain.model.StopwatchState
 import com.rafih.justfocus.domain.model.UiEvent
 import com.rafih.justfocus.domain.usecase.stopwatch.StopwatchUseCase
@@ -34,13 +29,10 @@ class StopWatchViewModel @Inject constructor(
     private val _stopwatchState = MutableStateFlow(StopwatchState(isRunning = false))
     val stopwatchState: StateFlow<StopwatchState> = _stopwatchState
 
-    var stopwatchActivity by mutableStateOf("")
-
     private val _uiEvent = MutableSharedFlow<UiEvent>()
     val uiEvent: SharedFlow<UiEvent> = _uiEvent
 
     private var stopwatchStateJob: Job? = null
-    private var focusModeSessionDuration by mutableStateOf(FocusModeSessionDuration())
 
     fun loadStopwatchState(){
         stopwatchStateJob?.cancel()
@@ -51,15 +43,14 @@ class StopWatchViewModel @Inject constructor(
         }
     }
 
-    fun startStopwatch(){
+    fun startStopwatch(activity: String){
         viewModelScope.launch {
-            startStopwatchUseCase()
-            focusModeSessionDuration.startMills = Calendar.getInstance().timeInMillis
+            startStopwatchUseCase(activity)
             loadStopwatchState() // Reload state setelah service terhubung
         }
     }
 
-    fun setStopWatchDuration(stopWatchDuration: StopwatchDuration){
+    fun setStopWatchDuration(stopWatchDuration: StopWatchDuration){
         viewModelScope.launch {
             if(stopWatchDuration.minute == 0 && stopWatchDuration.hour == 0 && stopWatchDuration.second == 0){
                 return@launch
@@ -71,12 +62,7 @@ class StopWatchViewModel @Inject constructor(
 
     fun stopStopwatch(){
         viewModelScope.launch {
-
-            //jadi ini agar akurat dia stop nya pas kapan bukan di lihat dari waktu saat ini, tapi di tambah dari waktu pada timer yang tampil
-            val stopTimeMills = focusModeSessionDuration.startMills + stopwatchState.value.toMillis()
-            focusModeSessionDuration.stopMills = stopTimeMills
-
-            stopFocusModeUseCase.execute(focusModeSessionDuration, stopwatchActivity).collectLatest {
+            stopFocusModeUseCase.execute().collectLatest {
                 it.handleUiEvent(_uiEvent){
                     _stopwatchState.value = StopwatchState(isRunning = false)
                 }
@@ -84,6 +70,7 @@ class StopWatchViewModel @Inject constructor(
         }
     }
 
+    // TODO: ini resume jadi pr
     fun pauseStopwatch(){
         viewModelScope.launch {
             stopwatchUseCase.pauseStopwatch()
